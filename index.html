@@ -2,27 +2,28 @@
 <html>
 <head>
   <link rel="stylesheet" href="./reset.css">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./styles.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <meta charset="utf-8">
   <title>Idea Box</title>
 </head>
 
 <body>
-  <h2> MK Idea Box </h2>
   <section class="container">
+  <h2> MK Idea Box </h2>
     <form id="form">
       <input type="text" id="title" placeholder="Idea"></input>
       <input type="text" id="body" placeholder="Body"></input>
-      <button type="submit" id="save">SAVE</button>
+      <button type="submit" id="savebtn">SAVE</button>
     </form>
+  </section>
 
-    <div>
-      <input type=text id="search" placeholder="Hold"></input>
-      <div>
+  <section class="searchandlist">
+      <input type=text id="search" placeholder="Search"></input>
+      <h3> Idea List : </h3>
+        <ul class="ideaList"></ul>
 
-        <h2 class="ideaList"></h2>
-        <ul>
-      </section>
       <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
       <script src="./scripts.js"></script>
 
