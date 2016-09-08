@@ -10,20 +10,23 @@
 </head>
 
 <body>
-  <section class="container">
+  <section class="inputcontainer">
   <h2> MK Idea Box </h2>
     <form id="form">
-      <input type="text" id="title" placeholder="Idea"></input>
-      <input type="text" id="body" placeholder="Body"></input>
-      <button type="submit" id="savebtn">SAVE</button>
+      <input type="text" class="title"></input>
+      <input type="text" class="body"></input>
+      <button type="submit" class="savebtn">SAVE</button>
     </form>
   </section>
 
-  <section class="searchandlist">
-      <input type=text id="search" placeholder="Search"></input>
+<form>
+<input type=text id="search"></input>
+</form>
+
+<section class= "listcontainer">
       <h3> Idea List : </h3>
         <ul class="ideaList"></ul>
-
+</section>
       <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
       <script src="./scripts.js"></script>
 
