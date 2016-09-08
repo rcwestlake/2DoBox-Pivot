@@ -28,6 +28,14 @@ body {
   color: #939598;
 }
 
+img {
+  height: 20px;
+  width: 20px;
+}
+
+p {
+  display: inline-block;
+}
 
 span {
   display: block;
