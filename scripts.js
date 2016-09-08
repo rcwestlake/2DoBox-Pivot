@@ -4,18 +4,22 @@ var title = $('#title').val();
 var body = $('#body').val();
 
 function saveIdea (title, body) {
-  return $('.ideaList').append(`
+  return $('.ideaList').prepend(`
     <li class="idea">
 
-    <span class="title"> ${$('#title').val()} <img class="delete" src="images/delete.svg"></span>
+    <div class="title"> ${$('#title').val()} <input type="image" src="images/delete.svg" class="delete"></input></div>
 
-    <span class="body"> ${$('#body').val()} </span>
+    <div class="body"> ${$('#body').val()} </div>
 
-    <span class="quality"> <img class="down" src="images/downvote.svg"> <img class="up" src="images/upvote.svg"> <p class="qualityword"> quality:</p> <p class="status">swill</p> </span>
+    <div class="quality"> <img class="down" src="images/downvote.svg"> <img class="up" src="images/upvote.svg"> <p class="qualityword"> quality:</p> <p class="status">swill</p> </div>
     </li>
     <hr>
     `);
-  }
+  };
+
+// $('ul').on('click','.delete', function () {
+//   console.log ('YO YO YO')
+// });
 
 $('.savebtn').on('click', function (event) {
   event.preventDefault()

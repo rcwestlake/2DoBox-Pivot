@@ -28,20 +28,18 @@ body {
   color: #939598;
 }
 
-img {
+.delete , .up , .down {
   height: 20px;
   width: 20px;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 p {
   display: inline-block;
 }
 
-span {
-  display: block;
-}
-
-input {
+.inputfield {
   padding: 10px;
   margin: auto;
   margin-top: 10px;
