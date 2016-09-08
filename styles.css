@@ -10,11 +10,27 @@ h3 {
   font-family: 'Roboto Slab', serif;
 }
 
+ul {
+  text-align: center;
+}
+
 body {
   font-family: 'Open Sans', sans-serif;
 }
 
-form {
+.title {
+  font-size: 30px;
+  color: #6D6E71;
+}
+
+.body {
+  font-size: 20px;
+  color: #939598;
+}
+
+
+span {
+  display: block;
 }
 
 input {
