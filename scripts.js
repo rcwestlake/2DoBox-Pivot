@@ -39,7 +39,27 @@ $('.savebtn').on('click', function (event) {
   event.preventDefault();
   saveIdea(title, body, timestamp);
   $('#form')[0].reset();
+
+  toggleButton();
+
   $('li').attr('id', timestamp)
+});
+
+function toggleButton (){
+  if ($('#title').val().length > 0  || $('#body').val().length > 0) {
+    $('.savebtn').attr('disabled', false);
+
+  } else {
+    $('.savebtn').attr('disabled', true);
+  }
+}
+
+// $('.savebtn').on('click', function(){
+//   toggleButton();
+// });
+
+$('#body').on('keyup', function(){
+  toggleButton();
 });
 
 
