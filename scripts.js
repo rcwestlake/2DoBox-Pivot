@@ -4,12 +4,27 @@ var title = $('#title').val();
 var body = $('#body').val();
 var timestamp = Date.now();
 
-function saveIdea (title, body, timestamp) {
+// var storage = getLocalStorage() || [];
+// renderToPage();
+// voteDown();
+// voteUp();
+
+$('.savebtn').on('click', function (event) {
+  event.preventDefault();
+  saveIdea(title, body);
+  $('#form')[0].reset();
+
+  toggleButton();
+});
+
+
+
+function saveIdea (title, body) {
   this.title = title;
   this.body = body;
   this.timestamp = Date.now();
   return $('.ideaList').prepend(`
-    <li class="idea">
+    <li class="idea" id= "${Date.now()}">
 
     <div class="title"> ${$('#title').val()} <input type="image" src="images/delete.svg" class="delete">
     </input>
@@ -30,20 +45,6 @@ function saveIdea (title, body, timestamp) {
     `);
   };
 
-// $('ul').on('click','.up', function () {
-//   alert ('YO YO YO')
-// });
-
-$('.savebtn').on('click', function (event) {
-
-  event.preventDefault();
-  saveIdea(title, body, timestamp);
-  $('#form')[0].reset();
-
-  toggleButton();
-
-  $('li').attr('id', timestamp)
-});
 
 function toggleButton (){
   if ($('#title').val().length > 0  || $('#body').val().length > 0) {
@@ -53,14 +54,10 @@ function toggleButton (){
     $('.savebtn').attr('disabled', true);
   }
 }
-
-// $('.savebtn').on('click', function(){
-//   toggleButton();
-// });
-
 $('#body').on('keyup', function(){
   toggleButton();
 });
 
-
-//give unique ids to ideas using timestamps via date.now//
+// $('ul').on('click','.up', function () {
+//   alert ('YO YO YO')
+// });
