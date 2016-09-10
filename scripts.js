@@ -80,3 +80,29 @@ $(this).parent().parent().removeClass('plausible');
  $(this).parent().parent().addClass('swill');
  $(this).parent().parent().removeClass('plausible');
   }});
+
+// Display Quality - UpVotes //
+
+$('ul').on('click', '.up', function () {
+if ($(this).parent().parent().hasClass('swill')) {
+  $(this).siblings('.qualityword').text('quality: swill'); }
+else if
+($(this).parent().parent().hasClass('plausible')) {
+  $(this).siblings('.qualityword').text('quality: plausible'); }
+else if
+($(this).parent().parent().hasClass('genius')) {
+  $(this).siblings('.qualityword').text('quality: genius'); }
+});
+
+// Dispaly Qulity - DownVotes //
+
+$('ul').on('click', '.down', function () {
+if ($(this).parent().parent().hasClass('swill')) {
+  $(this).siblings('.qualityword').text('quality: swill'); }
+else if
+($(this).parent().parent().hasClass('plausible')) {
+  $(this).siblings('.qualityword').text('quality: plausible'); }
+else if
+($(this).parent().parent().hasClass('genius')) {
+  $(this).siblings('.qualityword').text('quality: genius'); }
+});
