@@ -2,11 +2,38 @@ var saveButton = $('.savebtn');
 var searchField = $('#search');
 var title = $('#title').val();
 var body = $('#body').val();
+var ideaBox = [];
+// var quality = $('.qualityword');
 
 // var storage = getLocalStorage() || [];
 // renderToPage();
 // voteDown();
 // voteUp();
+
+
+function Idea(title, body, id, quality){
+  this.title = title;
+  this.body = body;
+  this.id = Date.now();
+  // this.quality = $('.qualityword');
+}
+
+function storeIdea(title){
+ this.title= title;
+ localStorage.setItem('Idea', JSON.stringify(ideaBox));
+}
+
+function getIdea(title){
+ var retrieveIdea = JSON.parse(localStorage.getItem(Idea));
+}
+
+$('.savebtn').on('click', function() {
+  var title = $('#title').val();
+  var body = $('#body').val();
+  var idea = new Idea(title, body);
+  ideaBox.push(idea);
+ storeIdea(ideaBox);
+});
 
 $('.savebtn').on('click', function (event) {
   event.preventDefault();
