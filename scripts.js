@@ -94,7 +94,7 @@ else if
   $(this).siblings('.qualityword').text('quality: genius'); }
 });
 
-// Dispaly Qulity - DownVotes //
+// Display Qulity - DownVotes //
 
 $('ul').on('click', '.down', function () {
 if ($(this).parent().parent().hasClass('swill')) {
