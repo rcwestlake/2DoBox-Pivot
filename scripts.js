@@ -2,7 +2,6 @@ var saveButton = $('.savebtn');
 var searchField = $('#search');
 var title = $('#title').val();
 var body = $('#body').val();
-var timestamp = Date.now();
 
 // var storage = getLocalStorage() || [];
 // renderToPage();
@@ -11,20 +10,16 @@ var timestamp = Date.now();
 
 $('.savebtn').on('click', function (event) {
   event.preventDefault();
-  saveIdea(title, body);
+  formIdea(title, body);
   $('#form')[0].reset();
 
   toggleButton();
 });
 
 
-
-function saveIdea (title, body) {
-  this.title = title;
-  this.body = body;
-  this.timestamp = Date.now();
+function formIdea (title, body) {
   return $('.ideaList').prepend(`
-    <li class="idea" id= "${Date.now()}">
+    <li class="idea swill" id= "${Date.now()}">
 
     <div class="title"> ${$('#title').val()} <input type="image" src="images/delete.svg" class="delete">
     </input>
@@ -36,12 +31,11 @@ function saveIdea (title, body) {
     <input type="image" src="images/downvote.svg" class="down">
     <input type="image" src="images/upvote.svg"
     class="up">
-    <p class="qualityword">quality:</p>
-    <p class="status">swill</p>
+    <p class="qualityword">quality: swill </p>
     </div>
-
-    </li>
     <hr>
+    </li>
+
     `);
   };
 
@@ -61,3 +55,28 @@ $('#body').on('keyup', function(){
 // $('ul').on('click','.up', function () {
 //   alert ('YO YO YO')
 // });
+
+$('ul').on('click', '.delete', function () {
+  $(this).parent().parent().remove();
+});
+
+//UpVote//
+$('ul').on('click', '.up', function () {
+  if ($(this).parent().parent().hasClass('swill')) {
+  $(this).parent().parent().addClass('plausible');
+  $(this).parent().parent().removeClass('swill'); }
+ else if ($(this).parent().parent().hasClass('plausible')) {
+$(this).parent().parent().addClass('genius');
+$(this).parent().parent().removeClass('plausible');
+ }});
+
+ //DownVote//
+
+ $('ul').on('click', '.down', function () {
+   if ($(this).parent().parent().hasClass('genius')) {
+   $(this).parent().parent().addClass('plausible');
+   $(this).parent().parent().removeClass('genius'); }
+  else if ($(this).parent().parent().hasClass('plausible')) {
+ $(this).parent().parent().addClass('swill');
+ $(this).parent().parent().removeClass('plausible');
+  }});
