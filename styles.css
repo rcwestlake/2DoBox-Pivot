@@ -6,6 +6,11 @@
   background-color: #E5F3F2;
 }
 
+textarea {
+  border: none;
+  resize: none;
+}
+
 .hero-title {
   margin: auto;
   margin-top: 5%;
@@ -44,7 +49,7 @@
   width: 60%;
 }
 
-.savebtn {
+.save {
   background: #00A79D;
   border: none;
   color: #FFFFFF;
@@ -55,11 +60,11 @@
   width: 60%;
 };
 
-.savebtn:hover{
+.save:hover{
   background: #045E55;
 }
 
-ul {
+article {
   width: 60%;
 }
 
@@ -116,7 +121,7 @@ ul {
   border: none;
 }
 
-.up {
+.upvote {
   background: url(../images/upvote.svg) no-repeat;
   border: none;
   position: absolute;
@@ -125,12 +130,12 @@ ul {
   width: 20px;
 }
 
-.up:hover {
+.upvote:hover {
   background: url(../images/upvote-hover.svg) no-repeat;
   border: none;
 }
 
-.down {
+.downvote {
   background: url(../images/downvote.svg) no-repeat;
   border: none;
   height: 20px;
@@ -140,7 +145,7 @@ ul {
   left: 8%;
 }
 
-.down:hover {
+.downvote:hover {
   background: url(../images/downvote-hover.svg) no-repeat;
   border: none;
 }
@@ -148,4 +153,25 @@ ul {
 .idea-quality {
   display: absolute;
   margin: auto;
+}
+
+@media screen and (max-width: 600px){
+  .title-input {
+    width: 90%;
+    height: 10%;
+  }
+  .body-input {
+    width: 90%;
+    height: 30%;
+  }
+  .save {
+    width: 90%;
+  }
+  .search-field {
+    width: 90%;
+  }
+  article.idea-card {
+    width: 90%;
+  }
+
 }
