@@ -11,6 +11,20 @@ function onLoad(){
   displayIdeas();
 };
 
+function toggleButton (){
+  if ($(".title-input").val().length > 0  || $(".body-input").val().length > 0) {
+    $saveButton.attr("disabled", false);
+
+  } else {
+    $saveButton.attr('disabled', true);
+  }
+}
+
+$(".body-input").on('keyup', function(){
+  toggleButton();
+});
+
+
 function checkLocalMakeLocal(){
   if (localStorage.getItem("ideas") === null){
     localStorage.setItem("ideas", JSON.stringify([]))
@@ -105,6 +119,8 @@ function makeNewIdea() {
 
 //runs the above functions on click of save//
 $($saveButton).on('click', makeNewIdea);
+$($saveButton).on('click', toggleButton);
+
 
 //deleting ideas from the display AND ALSO from storage//
 $('.idea-list').on('click', '.delete-idea', removeParent);
