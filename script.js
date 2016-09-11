@@ -105,3 +105,21 @@ function makeNewIdea() {
 
 //runs the above functions on click of save//
 $($saveButton).on('click', makeNewIdea);
+
+//deleting ideas from the display AND ALSO from storage//
+$('.idea-list').on('click', '.delete-idea', removeParent);
+
+function removeParent() {
+  var ideaArticle = $(this).closest('.idea-card');
+  var idToDeleteFromStorage = parseInt(ideaArticle.attr("id"));
+  deleteIdeaFromStorage(idToDeleteFromStorage);
+  ideaArticle.remove();
+};
+
+function deleteIdeaFromStorage(toBeDeleteID) {
+  var existingIdeas = getIdeas();
+  existingIdeas = existingIdeas.filter(function(idea, index) {
+    return idea.id !== parseInt(toBeDeleteID)
+  });
+  localStorage.setItem("ideas", JSON.stringify(existingIdeas));
+};
