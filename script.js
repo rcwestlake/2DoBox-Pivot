@@ -7,7 +7,7 @@ var $saveButton = $('.save');
 onLoad();
 
 function onLoad(){
-  checkLocalOrMakeLocal();
+  checkLocalMakeLocal();
   displayIdeas();
 };
 
@@ -141,3 +141,29 @@ function downVote() {
   if (ideaQuality === 'Genius') {ideaArticle.find('.displayed-quality').text('Plausible')};
   if (ideaQuality === 'Plausible') {ideaArticle.find('.displayed-quality').text('Swill')};
 };
+
+//update storage when stuff is edited/clicked in the dom
+$('.idea-list').on('keyup', '.editable', updateStorage);
+$('.idea-list').on('blur', '.upvote', updateStorage);
+$('.idea-list').on('blur', '.downvote', updateStorage);
+
+//when a user edits an idea in the dom, this function makes sure those changes are reflected in storage
+function updateStorage() {
+  var editedIdeaArticle = $(this).closest('.idea-card');
+  var editedIdeaId = parseInt(editedIdeaArticle.attr('id'));
+  var editedIdeaTitle = editedIdeaArticle.find('h2.editable').text();
+  var editedIdeaBody = editedIdeaArticle.find('p.editable').text();
+  var editedIdeaQuality = editedIdeaArticle.find('.displayed-quality').text();
+  deleteIdeaFromStorage(editedIdeaId);
+  var editedIdea = new Idea(editedIdeaId, editedIdeaTitle, editedIdeaBody, editedIdeaQuality);
+  var existingIdeas = getIdeas();
+  existingIdeas.push(editedIdea);
+  localStorage.setItem("ideas", JSON.stringify(existingIdeas));
+};
+
+//focuses out when they press enter in the editable fields
+$('.idea-card').on('keypress', '.editable', function(e) {
+   if(e.keyCode == 13)
+   {e.preventDefault();
+   };
+});
