@@ -75,26 +75,36 @@ function makeNewIdea() {
   // toggleButton();
 };
 
-$($saveButton).on('click', makeNewIdea);
-
 function clearInputs() {
   $titleInput.val('');
   $bodyInput.val('');
 };
 
-function makeIdeaCard (id, title, body, quality) {
-  return $('.ideaList').prepend(`
+//takes input data and creates idea card to display, prepends as article to section designated in html//
+function ideaCard(id, title, body, quality) {
+  $('.idea-list').prepend(`
     <article id="`+ id +`" class="idea-card">
-    <h2> class="editable" contenteditable="true">` + title + `</h2>
-    <button class="delete-idea"></button>
-    <p class="editable idea-body" contenteditable="true">`+ body +`</p>
-    <button class="up"></button>
-    <button class="down"></button>
-    <p class="idea-quality ` + quality +`"><span>Quality:</span> <span class="quality-in-DOM">` + quality + `</span> </p>
-    <hr>
-    </article>
-    `);
-  };
+      <h2 class="editable" contenteditable="true">` + title + `</h2>
+      <button class="delete-idea"></button>
+      <p class="editable idea-body" contenteditable="true">` + body + `</p>
+      <button class="upvote"></button>
+      <button class="downvote"></button>
+      <p class= "idea-quality ` + quality +`"><span>Quality:</span> <span class="displayed-quality">` + quality + `</span> </p>
+    </article>`);
+};
+
+//takes inputs and turns into idea object, pushes that to storage, also runs the function above to display the newly created/stored idea card//
+function makeNewIdea() {
+  var newIdea = new Idea(uniqueId(), getTitle(), getBody(), 'Swill')
+  existingIdeas = getIdeas();
+  existingIdeas.push(newIdea);
+  localStorage.setItem('ideas', JSON.stringify(existingIdeas));
+  ideaCard(newIdea.id, newIdea.title, newIdea.body, 'Swill');
+  clearInputFields();
+};
+
+//runs the above functions on click of save//
+$($saveButton).on('click', makeNewIdea);
 
   //update storage when stuff is edited/clicked in the dom
 $('.idea-list').on('keyup', '.editable', updateEverything);
