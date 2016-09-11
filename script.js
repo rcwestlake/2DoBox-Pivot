@@ -123,3 +123,21 @@ function deleteIdeaFromStorage(toBeDeleteID) {
   });
   localStorage.setItem("ideas", JSON.stringify(existingIdeas));
 };
+
+//upvote and downvote buttons update quality in display AND in local storage//
+$('.idea-list').on('click', '.upvote', upVote);
+$('.idea-list').on('click', '.downvote', downVote)
+
+function upVote() {
+  var ideaArticle = $(this).closest('.idea-card');
+  var ideaQuality = ideaArticle.find('.displayed-quality').text();
+  if (ideaQuality === 'Swill') {ideaArticle.find('.displayed-quality').text('Plausible')}
+  if (ideaQuality === 'Plausible') {ideaArticle.find('.displayed-quality').text('Genius')}
+};
+
+function downVote() {
+  var ideaArticle = $(this).closest('.idea-card');
+  var ideaQuality = ideaArticle.find('.displayed-quality').text();
+  if (ideaQuality === 'Genius') {ideaArticle.find('.displayed-quality').text('Plausible')};
+  if (ideaQuality === 'Plausible') {ideaArticle.find('.displayed-quality').text('Swill')};
+};
