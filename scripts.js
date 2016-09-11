@@ -1,10 +1,9 @@
 var saveButton = $('.savebtn');
-var searchField = $('#search');
-var titleInput = $('#title');
-var bodyInput = $('#body');
-var ideaBox = [];
+var searchField = $('.search-field');
+var titleInput = $('.title-input');
+var bodyInput = $('.body-input');
 
-//onLoadFunctions//
+//onLoad Functions, retrieve local storage//
 
 onLoad();
 
@@ -14,46 +13,46 @@ function onLoad(){
 };
 
 function checkLocalMakeLocal(){
-  if (localStorage.getItem("ideaBox") === null){
-    localStorage.setItem("ideabox", JSON.stringify([]))
+  if (localStorage.getItem("ideas") === null){
+    localStorage.setItem("ideas", JSON.stringify([]))
   };
 };
 
-//STORAGE//
-function storeIdea(title){
- this.title= title;
- localStorage.setItem('Idea', JSON.stringify(ideaBox));
-}
+function getIdeas(){
+ return JSON.parse(localStorage.getItem("ideas"));
+};
 
-function getIdeas(title){
- var retrieveIdea = JSON.parse(localStorage.getItem(ideaBox));
-}
-
+function displayIdeas(){
+  var ideas = getIdeas();
+  ideas.forEach(function(idea) {
+    addNewIdea(idea.id, idea.title, idea.body, idea.quality);
+  });
+};
 
 //defines an idea//
-function Idea(title, body, id, quality){
+function Idea(id, title, body, quality){
+  this.id = Date.now();
   this.title = title;
   this.body = body;
-  this.id = parseInt(id);
   this.quality = quality;
 };
 
-//generates random id for each idea box//
-function randomId() {
-  return Date.now().tostring();
-};
+//generates random id for each idea //
+// function idGenerator() {
+//   return Date.now().tostring();
+// };
 
 //save button disabled if input fields are empty//
 
 function toggleButton (){
-  if ($('#title').val().length > 0  || $('#body').val().length > 0) {
+  if ($('.title-input').val().length > 0  || $('.body-input').val().length > 0) {
     $('.savebtn').attr('disabled', false);
 
   } else {
     $('.savebtn').attr('disabled', true);
   }
 }
-$('#body').on('keyup', function(){
+$('.body-input').on('keyup', function(){
   toggleButton();
 });
 
@@ -74,26 +73,26 @@ function clearInputs() {
 
 //takes inputs, puts them into an object for storage, pushes that box to storage, and displays new box on screen//
 function addNewIdea() {
-  var newIdea = new Idea(randomID(), getTitle(), getBody(), 'Swill')
+  var newIdea = new Idea(Date.now(), getTitle(), getBody(), 'Swill')
   currentIdeas= getIdeas();
   currentIdeas.push(newIdea);
-  local.Storage.setItem('ideaBox', JSON.stringify(currentIdeas));
+  localStorage.setItem('ideas', JSON.stringify(currentIdeas));
   formIdea(newIdea.id, newIdea.title, newIdea.body, 'Swill');
-  clearInputs();
 };
 
 $('.savebtn').on('click', function (event) {
   event.preventDefault();
   addNewIdea();
+  clearInputs();
   toggleButton();
 });
 
 
 function formIdea (id, title, body, quality) {
   return $('.ideaList').prepend(`
-    <li id="`+ id +`" class="idea-box">
+    <article id="`+ id +`" class="idea-card">
     <h2> class="editable" contenteditable="true">` + title + `</h2>
-    <button class="delete"></button>
+    <button class="delete-idea"></button>
     <p class="editable idea-body" contenteditable="true">`+ body +`</p>
     <button class="up"></button>
     <button class="down"></button>

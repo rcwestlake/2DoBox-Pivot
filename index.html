@@ -1,35 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Idea Box</title>
   <link rel="stylesheet" href="./reset.css">
   <link rel="stylesheet" href="./styles.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <meta charset="utf-8">
-  <title>Idea Box</title>
 </head>
 
 <body>
-  <section class="inputcontainer">
-  <h2> MK Idea Box </h2>
-    <form id="form">
-      <input class="inputfield" type="text" id="title" placeholder="Idea Title"></input>
+  <header class="hero">
+  <h1 class="hero-title"><span class="teal-h1">idea</span><span class="grey-h1">box</span></h1>
+      <input class="title-input" type="text" placeholder="Idea Title"></input>
 
-      <input class="inputfield" type="text" id="body" placeholder="Idea Body"></input>
-      
-      <button type="submit" class="savebtn" disabled='true'>SAVE</button>
+      <input class="body-input" type="text" placeholder="Idea Body"></input>
+
+      <button class="savebtn" disabled='true'>SAVE</button>
 
     </form>
   </section>
 
 <form>
-<input class="inputfield" type=text id="search" placeholder="Search"></input>
+<input class="search-field" type=text placeholder="Search"></input>
 </form>
 
-<section class= "listcontainer">
-      <h3> Idea List : </h3>
-        <ul class="ideaList"></ul>
-</section>
+<section class= "ideaList"></section>
+
       <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
       <script src="./scripts.js"></script>
 
