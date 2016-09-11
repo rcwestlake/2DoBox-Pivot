@@ -8,7 +8,7 @@ onLoad();
 
 function onLoad(){
   checkLocalOrMakeLocal();
-  populateDOM();
+  displayIdeas();
 };
 
 function checkLocalMakeLocal(){
