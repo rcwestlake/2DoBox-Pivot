@@ -105,34 +105,3 @@ function makeNewIdea() {
 
 //runs the above functions on click of save//
 $($saveButton).on('click', makeNewIdea);
-
-  //update storage when stuff is edited/clicked in the dom
-$('.idea-list').on('keyup', '.editable', updateEverything);
-
-$('.idea-list').on('blur', '.quality-button', updateEverything);
-
-//when a user edits an idea in the dom, this function makes sure those changes are reflected in storage
-function updateEverything() {
-  var editedIdeaArticle = $(this).closest('.idea-card');
-  var editedIdeaId = parseInt(editedIdeaArticle.attr('id'));
-  var editedIdeaTitle = editedIdeaArticle.find('h2.editable').text();
-  var editedIdeaBody = editedIdeaArticle.find('p.editable').text();
-  var editedIdeaQuality = editedIdeaArticle.find('.quality-in-DOM').text();
-  deleteIdeaFromStorage(editedIdeaId);
-  var editedIdea = new Idea(editedIdeaId, editedIdeaTitle, editedIdeaBody, editedIdeaQuality);
-  var currentIdeas = getIdeas();
-  currentIdeas.push(editedIdea);
-  localStorage.setItem("ideas", JSON.stringify(currentIdeas));
-};
-
-//focuses out when they press enter in the editable fields
-$('.idea-card').on('keypress', '.editable', function(e) {
-   if(e.keyCode == 13)
-   {e.preventDefault();
-   };
-});
-
-
-// $('ul').on('click','.up', function () {
-//   alert ('YO YO YO')
-// });
