@@ -152,10 +152,10 @@ function updateStorage() {
   localStorage.setItem("allideas", JSON.stringify(existingIdeas));
 };
 
-//focuses out when they press enter in the editable fields
-$('.idea-card').on('keypress', '.editable', function(e) {
-   if(e.keyCode == 13)
-   {e.preventDefault();
+//causes enter to act as submit button//
+$('.idea-card').on('keypress', '.editable', function(event) {
+   if(event.keyCode == 13)
+   {event.preventDefault();
    };
 });
 
