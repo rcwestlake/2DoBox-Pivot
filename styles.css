@@ -105,6 +105,7 @@ article {
 
 .delete-idea {
   position: absolute;
+  background-color: white;
   top: 2%;
   right: 2%;
   float: right;
@@ -118,6 +119,7 @@ article {
 .delete-idea:hover {
   background: url(images/delete-hover.svg) no-repeat;
   border: none;
+  background-color: white;
 }
 
 .upvote {
@@ -127,11 +129,13 @@ article {
   bottom: 10%;
   height: 20px;
   width: 20px;
+  background-color: white;
 }
 
 .upvote:hover {
   background: url(images/upvote-hover.svg) no-repeat;
   border: none;
+  background-color: white;
 }
 
 .downvote {
@@ -142,11 +146,13 @@ article {
   position: absolute;
   bottom: 10%;
   left: 8%;
+  background-color: white;
 }
 
 .downvote:hover {
   background: url(images/downvote-hover.svg) no-repeat;
   border: none;
+  background-color: white;
 }
 
 .idea-quality {
