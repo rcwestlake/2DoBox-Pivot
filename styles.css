@@ -110,14 +110,14 @@ article {
   right: 2%;
   float: right;
   display: inline-block;
-  background: url(images/delete.svg) no-repeat;
+  background: url(./images/delete.svg) no-repeat;
   border: none;
   height: 20px;
   width: 20px;
 }
 
 .delete-idea:hover {
-  background: url(images/delete-hover.svg) no-repeat;
+  background: url(./images/delete-hover.svg) no-repeat;
   border: none;
   z-index: 99;
 }
