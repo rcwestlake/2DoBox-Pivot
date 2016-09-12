@@ -2,27 +2,15 @@ var $titleInput = $('.title-input');
 var $bodyInput = $('.body-input');
 var $saveButton = $('.save');
 
-//onload functions that find any ideas in local storage and display them on the page//
+//onload functions that find any ideas in local storage and display them on the page, and toggles off save butotn when there is no input//
 
 onLoad();
 
 function onLoad(){
   retrieveLocal();
   displayIdeas();
-};
-
-function toggleButton (){
-  if ($(".title-input").val().length > 0  || $(".body-input").val().length > 0) {
-    $saveButton.attr("disabled", false);
-
-  } else {
-    $saveButton.attr('disabled', true);
-  }
-}
-
-$(".body-input").on('keyup', function(){
   toggleButton();
-});
+};
 
 
 function retrieveLocal(){
@@ -30,20 +18,27 @@ function retrieveLocal(){
     localStorage.setItem("allideas", JSON.stringify([]))
   };
 };
-
 function getIdeas(){
  return JSON.parse(localStorage.getItem("allideas"));
 };
-
 function displayIdeas(){
   var ideas = getIdeas();
   ideas.forEach(function(idea) {
     ideaCard(idea.id, idea.title, idea.body, idea.quality);
   });
 };
+function toggleButton (){
+  if ($(".title-input").val().length > 0  || $(".body-input").val().length > 0) {
+    $saveButton.attr("disabled", false);
+  } else {
+    $saveButton.attr('disabled', true);
+  }
+}
+$(".body-input").on('keyup', function(){
+  toggleButton();
+});
 
 //constructor defining what an idea is//
-
 function Idea(id, title, body, quality) {
   this.id = parseInt(id);
   this.title = title;
@@ -55,29 +50,20 @@ function Idea(id, title, body, quality) {
 function uniqueId() {
   return Date.now().toString();
 };
-//save button disabled if input fields are empty//
 
 //functions for grabbing the input from the user//
 function getTitle() {
   var ideaTitle = $titleInput.val();
   return ideaTitle;
 };
-
 function getBody() {
   var ideaBody = $bodyInput.val();
   return ideaBody;
 };
-
 function getSearch() {
   var searchInput = $('.search-field').val();
   return searchInput;
 };
-
-function clearInputFields() {
-  $titleInput.val('');
-  $bodyInput.val('');
-};
-
 function clearInputs() {
   $titleInput.val('');
   $bodyInput.val('');
@@ -103,7 +89,7 @@ function makeNewIdea() {
   existingIdeas.push(newIdea);
   localStorage.setItem('allideas', JSON.stringify(existingIdeas));
   ideaCard(newIdea.id, newIdea.title, newIdea.body, 'Swill');
-  clearInputFields();
+  clearInputs();
 };
 
 //runs the above functions on click of save//
@@ -112,9 +98,9 @@ $($saveButton).on('click', toggleButton);
 
 
 //deleting ideas from the display AND ALSO from storage//
-$('.idea-list').on('click', '.delete-idea', removeParent);
+$('.idea-list').on('click', '.delete-idea', deleteIdea);
 
-function removeParent() {
+function deleteIdea() {
   var ideaArticle = $(this).closest('.idea-card');
   var idToDeleteFromStorage = parseInt(ideaArticle.attr("id"));
   deleteIdeaFromStorage(idToDeleteFromStorage);
