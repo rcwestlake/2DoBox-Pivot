@@ -6,21 +6,20 @@
   background-color: #E5F3F2;
 }
 
+.hero-title {
+  margin: auto;
+  margin-top: 5%;
+  font-size: 48px;
+}
+
 textarea {
   border: none;
   resize: none;
 }
 
-.hero-title {
-  margin: auto;
-  margin-top: 5%;
-  font-size: 3em;
-}
-
 .teal-h1 {
   color: #00A79D;
 }
-
 .grey-h1 {
   color: #6D6E71;
 }
@@ -29,11 +28,11 @@ textarea {
   border: 2px solid #D1D3D4;
   width: 60%;
   font-size: 100%;
-  height: 2em;
+  height: 32px;
   margin: auto;
   margin-bottom: 1%;
   text-indent: 10px;
-  line-height: 2em;
+  line-height: 32px;
 }
 
 .search-field {
@@ -41,7 +40,7 @@ textarea {
   display: flex;
   flex-direction: column;
   font-size: 100%;
-  height: 2em;
+  height: 32px;
   margin: auto;
   margin-top: 3%;
   margin-bottom: 3%;
@@ -85,7 +84,7 @@ article {
 }
 
 .idea-card h2 {
-  font-size: 1.5em;
+  font-size: 24px;
   color: #6D6E71;
   font-family: 'Roboto Slab', serif;
 }

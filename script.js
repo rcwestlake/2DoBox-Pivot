@@ -159,7 +159,6 @@ $('.idea-card').on('keypress', '.editable', function(e) {
    };
 });
 
-
 function getSearchInput() {
   var searchInput = $('.search-field').val();
   return searchInput;
