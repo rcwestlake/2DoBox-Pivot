@@ -7,7 +7,7 @@ var $saveButton = $('.save');
 onLoad();
 
 function onLoad(){
-  checkLocalMakeLocal();
+  retrieveLocal();
   displayIdeas();
 };
 
@@ -25,14 +25,14 @@ $(".body-input").on('keyup', function(){
 });
 
 
-function checkLocalMakeLocal(){
-  if (localStorage.getItem("ideas") === null){
-    localStorage.setItem("ideas", JSON.stringify([]))
+function retrieveLocal(){
+  if (localStorage.getItem("allideas") === null){
+    localStorage.setItem("allideas", JSON.stringify([]))
   };
 };
 
 function getIdeas(){
- return JSON.parse(localStorage.getItem("ideas"));
+ return JSON.parse(localStorage.getItem("allideas"));
 };
 
 function displayIdeas(){
@@ -78,17 +78,6 @@ function clearInputFields() {
   $bodyInput.val('');
 };
 
-//takes that input data that has been stored and creates idea card to display, prepends as article to section designated in html//
-function makeNewIdea() {
-  var newIdea = new Idea(uniqueId(), getTitleInput(), getBodyInput(), 'Swill')
-  currentIdeas= getIdeas();
-  currentIdeas.push(newIdea);
-  localStorage.setItem('ideas', JSON.stringify(currentIdeas));
-  makeIdeaCard(newIdea.id, newIdea.title, newIdea.body, 'Swill');
-  clearInputs();
-  // toggleButton();
-};
-
 function clearInputs() {
   $titleInput.val('');
   $bodyInput.val('');
@@ -112,7 +101,7 @@ function makeNewIdea() {
   var newIdea = new Idea(uniqueId(), getTitle(), getBody(), 'Swill')
   existingIdeas = getIdeas();
   existingIdeas.push(newIdea);
-  localStorage.setItem('ideas', JSON.stringify(existingIdeas));
+  localStorage.setItem('allideas', JSON.stringify(existingIdeas));
   ideaCard(newIdea.id, newIdea.title, newIdea.body, 'Swill');
   clearInputFields();
 };
@@ -137,7 +126,7 @@ function deleteIdeaFromStorage(toBeDeleteID) {
   existingIdeas = existingIdeas.filter(function(idea, index) {
     return idea.id !== parseInt(toBeDeleteID)
   });
-  localStorage.setItem("ideas", JSON.stringify(existingIdeas));
+  localStorage.setItem("allideas", JSON.stringify(existingIdeas));
 };
 
 //upvote and downvote buttons update quality in display AND in local storage//
@@ -174,7 +163,7 @@ function updateStorage() {
   var editedIdea = new Idea(editedIdeaId, editedIdeaTitle, editedIdeaBody, editedIdeaQuality);
   var existingIdeas = getIdeas();
   existingIdeas.push(editedIdea);
-  localStorage.setItem("ideas", JSON.stringify(existingIdeas));
+  localStorage.setItem("allideas", JSON.stringify(existingIdeas));
 };
 
 //focuses out when they press enter in the editable fields
