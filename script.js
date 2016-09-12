@@ -152,7 +152,7 @@ $('.idea-list').on('keyup', '.editable', updateStorage);
 $('.idea-list').on('blur', '.upvote', updateStorage);
 $('.idea-list').on('blur', '.downvote', updateStorage);
 
-//when a user edits an idea in the dom, this function makes sure those changes are reflected in storage
+//when a user edits an idea in the display, this function pushes those changes to storage//
 function updateStorage() {
   var editedIdeaArticle = $(this).closest('.idea-card');
   var editedIdeaId = parseInt(editedIdeaArticle.attr('id'));
