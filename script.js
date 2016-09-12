@@ -80,7 +80,7 @@ function clearInputFields() {
 
 //takes that input data that has been stored and creates idea card to display, prepends as article to section designated in html//
 function makeNewIdea() {
-  var newIdea = new Idea(idGenerator(), getTitleInput(), getBodyInput(), 'Swill')
+  var newIdea = new Idea(uniqueId(), getTitleInput(), getBodyInput(), 'Swill')
   currentIdeas= getIdeas();
   currentIdeas.push(newIdea);
   localStorage.setItem('ideas', JSON.stringify(currentIdeas));
