@@ -158,3 +158,23 @@ $('.idea-card').on('keypress', '.editable', function(e) {
    {e.preventDefault();
    };
 });
+
+
+function getSearchInput() {
+  var searchInput = $('.search-field').val();
+  return searchInput;
+};
+$('.search-field').on('keyup', function(){
+  var searchInputWithSpaces = $(this).val();
+  var searchInput = searchInputWithSpaces.trim();
+  search(searchInput);
+});
+
+function search(searchInput) {
+  if(searchInput !== "") {
+    $('.idea-list').find('article:not(:contains('+ searchInput + '))').slideUp();
+    $('.idea-list').find('article:contains(' + searchInput + ')').slideDown();
+  } else {
+    $('.idea-list').find('article').slideDown();
+  };
+};
