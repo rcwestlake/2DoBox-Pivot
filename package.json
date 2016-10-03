@@ -1,0 +1,29 @@
+{
+  "name": "2dobox-pivot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mziccardi/2DoBox-Pivot.git"
+  },
+  "keywords": [
+    "webpack"
+  ],
+  "author": "Mike, Nick, Ryan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mziccardi/2DoBox-Pivot/issues"
+  },
+  "homepage": "https://github.com/mziccardi/2DoBox-Pivot#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.0",
+    "mocha-loader": "^1.0.0",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.1"
+  }
+}
