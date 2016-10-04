@@ -49,6 +49,27 @@
 	__webpack_require__(4);
 	alert();
 
+	// const $ = require('jquery');
+
+
+	// define globals for main functions
+	var $titleInput = $('.title-input');
+	var $bodyInput = $('.body-input');
+	var $saveButton = $('.save');
+	// upvote button
+	// downvote button
+	// remove button
+	// completed tasks button
+
+
+	// input field character counter
+
+
+	$($saveButton).on('click', function () {
+	  var task = new Task(id, Task.getTitle(), Task.getBody(), importance);
+	  console.log(task); // require Task at top of page, ensure it references the right function
+	});
+
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
@@ -1811,7 +1832,10 @@
 	       </article>`);
 	  },
 	  renderArray: function () {
-	    for (var i = 0; i < 10; i++) this.renderTasksToHtml(this.allTasks[i]);
+	    var tasks = this.retrieve();
+	    for (var i = 0; i < 10; i++) {
+	      this.renderTasksToHtml(tasks[i]);
+	    }
 	  }
 	};
 
