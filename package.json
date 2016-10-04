@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/mziccardi/2DoBox-Pivot#readme",
   "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
     "chai": "^3.5.0",
     "jquery": "^3.1.1",
     "mocha": "^3.1.0",
