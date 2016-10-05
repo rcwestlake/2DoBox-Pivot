@@ -44,13 +44,8 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(1);
-	__webpack_require__(3);
-	__webpack_require__(4);
-	alert();
-
-	// const $ = require('jquery');
-
+	var TaskArray = __webpack_require__(1);
+	var Task = __webpack_require__(2);
 
 	// define globals for main functions
 	var $titleInput = $('.title-input');
@@ -64,76 +59,33 @@
 
 	// input field character counter
 
-
-	$($saveButton).on('click', function () {
-	  var task = new Task(id, Task.getTitle(), Task.getBody(), importance);
-	  console.log(task); // require Task at top of page, ensure it references the right function
+	$(document).ready(function () {
+	  TaskArray.populateArray();
+	  TaskArray.renderArray();
+	  debugger;
 	});
 
-/***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
+	$($saveButton).on('click', function () {
+	  var task = new Task(getTitle(), getBody());
+	  console.log(task);
+	  TaskArray.pushToArray(task);
+	  TaskArray.store();
+	  TaskArray.renderTasksToHtml(task);
+	});
 
-	const $ = __webpack_require__(2);
+	$('.task-list').on('click', '.remove-task', function (e) {
+	  var id = parseInt($(this).parent().attr('id'));
+	  TaskArray.findTaskById(id);
+	  TaskArray.removeTask(id);
+	});
 
-	function Task(id, title, body, importance) {
-	  this.id = id || Date.now();
-	  this.title = title;
-	  this.body = body;
-	  this.importance = importance || 'Normal';
-	}
-
-	// need upvote prototype method
-	// need downvote prototype method
-	// need remove task prototype method
-	// need edit title prototype method
-	// need edit task prototype method
-	// need completed task prototype (toggle class of completed) method
-
-	Task.prototype.upVote = function () {
-	  let importance = this.importance;
-	  this.importance = increaceImportance[importance];
-
-	  let increaceImportance = {
-	    'None': 'Low',
-	    'Low': 'Normal',
-	    'Normal': 'High',
-	    'High': 'Critical'
-	  };
-	  return tasksArray.store(); // need to write this function
-	};
-
-	Task.prototype.downVote = function () {
-	  let importance = this.importance;
-	  this.importance = increaceImportance[importance];
-
-	  let increaceImportance = {
-	    'Critical': 'High',
-	    'High': 'Normal',
-	    'Normal': 'Low',
-	    'Low': 'None'
-	  };
-	  return tasksArray.store(); // need to write this function
-	};
-
-	Task.prototype.remove = function () {
-	  var allTasks = allTasks.filter(allOtherArrays);
-	  tasksArray.store(); // stores new array, need to write
-	  tasksArray.render(); // renders new arrary, need to write
-	};
-
-	Task.prototype.editTaskTitle = function () {};
-
-	Task.prototype.editTaskBody = function () {};
-
-	Task.prototype.addCompletedTaskClass = function () {
-	  var specificTask = $(this).closest('.task'); // confirm this is the right hierarcy and class name
-	  specificTask.toggleClass('completed');
-	};
-
-	function allOtherArrays(r) {
-	  return r.id !== id;
-	}
+	$('.task-list').on('click', '.upvote', function (e) {
+	  console.log(this);
+	  var id = parseInt($(this).parent().attr('id'));
+	  console.log(id);
+	  var task = TaskArray.findTaskById(id);
+	  Task.prototype.upVote(task);
+	});
 
 	function getTitle() {
 	  var taskTitle = $titleInput.val();
@@ -145,13 +97,176 @@
 	  return taskBody;
 	}
 
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const Task = __webpack_require__(2);
+	const $ = __webpack_require__(3);
+
+	var TaskArray = {
+
+	  allTasks: [],
+
+	  pushToArray: function (newTask) {
+	    this.allTasks.push(newTask);
+	  },
+
+	  store: function () {
+	    localStorage.setItem('allTasks', JSON.stringify(this.allTasks));
+	  },
+	  retrieve: function () {
+	    return JSON.parse(localStorage.getItem("allTasks"));
+	  },
+	  renderTasksToHtml: function (task) {
+	    $('.task-list').prepend(`
+	       <article id="` + task.id + `" class="a-task">
+	         <h2 class="task-title" contenteditable="true">` + task.title + `</h2>
+	         <button class="remove-task"></button>
+	         <p class="task-body" contenteditable="true">` + task.body + `</p>
+	         <button class="upvote"></button>
+	         <button class="downvote"></button>
+	         <p class= "task-importance ` + task.importance + `"><span>Importance:</span> <span class="displayed-importance">` + task.importance + `</span> </p>
+	       </article>`);
+	  },
+
+	  populateArray: function () {
+	    var tasks = this.retrieve();
+	    for (var i = 0; i < tasks.length; i++) {
+	      var object = tasks[i];
+	      var task = new Task(object.title, object.body, object.id, object.importance);
+	      this.pushToArray(task);
+	    }
+	  },
+
+	  renderArray: function () {
+	    var tasks = this.allTasks;
+	    if (tasks.length < 10) {
+	      for (var i = 0; i < tasks.length; i++) {
+	        this.renderTasksToHtml(tasks[i]);
+	      }
+	    }
+	  },
+
+	  // upVote: function(task) {
+	  //     var importance = task.importance;
+	  //     var increaseImportance = {
+	  //       'None': 'Low',
+	  //       'Low': 'Normal',
+	  //       'Normal': 'High',
+	  //       'High': 'Critical'
+	  //     };
+	  //
+	  //     task.importance = increaseImportance[importance];
+	  //
+	  //     TaskArray.store();
+	  //     TaskArray.clearListContainer();
+	  //     TaskArray.renderArray();
+	  // },
+
+	  removeTask: function (id) {
+	    debugger;
+	    this.allTasks = this.allTasks.filter(function (i) {
+	      return i.id !== id;
+	    });
+	    this.store();
+	    this.clearListContainer();
+	    this.renderArray();
+	  },
+
+	  clearListContainer: function () {
+	    $('.a-task').remove();
+	  },
+
+	  findTaskById: function (id) {
+	    return this.allTasks.find(function (i) {
+	      return i.id === id;
+	    });
+	  },
+
+	  allOtherArrays: function (task) {
+	    return task.id !== id;
+	  }
+	};
+
+	// empty array for 2Dos
+	// add new idea to array
+	// set array to local storage
+	// render ten most recent, event listener will tell funciton to show 10 more
+	// get local storage
+	// find task by ID
+	// clear the DOM
+	// search function
+	// show completed tasks
+	// sort method which filters through array, consider map or filter function
+	module.exports = TaskArray;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var TaskArray = __webpack_require__(1);
+	var $ = __webpack_require__(3);
+
+	function Task(title, body, id, importance) {
+	  this.title = title;
+	  this.body = body;
+	  this.id = id || Date.now();
+	  this.importance = importance || 'Normal';
+	}
+
+	Task.prototype.upVote = function (task) {
+	  var importance = task.importance;
+	  debugger;
+	  var increaseImportance = {
+	    'None': 'Low',
+	    'Low': 'Normal',
+	    'Normal': 'High',
+	    'High': 'Critical'
+	  };
+
+	  task.importance = increaseImportance[importance];
+
+	  TaskArray.store();
+	  TaskArray.clearListContainer();
+	  TaskArray.renderArray();
+	};
+
+	Task.prototype.downVote = function () {
+	  var importance = this.importance;
+	  this.importance = increaceImportance[importance];
+
+	  var increaceImportance = {
+	    'Critical': 'High',
+	    'High': 'Normal',
+	    'Normal': 'Low',
+	    'Low': 'None'
+	  };
+	  return tasksArray.store();
+	};
+
+	Task.prototype.editTaskTitle = function () {};
+
+	Task.prototype.editTaskBody = function () {};
+
+	Task.prototype.addComparedTaskClass = function () {
+	  var specificTask = $(this).closest('.task'); // confirm this is the right hierarcy and class name
+	  specificTask.toggleClass('compared');
+	};
+
+	function allOtherArrays(r) {
+	  return r.id !== id;
+	}
+
 	function getSearch() {
 	  var searchInput = $('.search-field').val();
 	  return searchInput;
 	}
 
+	module.exports = Task;
+
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -1799,66 +1914,6 @@
 	// (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
 	// and CommonJS for browser emulators (#13566)
 	if(!noGlobal){window.jQuery=window.$=jQuery;}return jQuery;});
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	const $ = __webpack_require__(2);
-
-	var TaskArray = {
-
-	  allTasks: [],
-
-	  pushToArray: function (newTask) {
-	    allTasks.push(newTask);
-	  },
-
-	  store: function () {
-	    localStorage.setItem('allTasks', JSON.stringify(this.allTasks));
-	  },
-	  retrieve: function () {
-	    JSON.parse(localStorage.getItem("allTasks"));
-	  },
-	  renderTasksToHtml: function (task) {
-	    $('.idea-list').prepend(`
-	       <article id="` + task.id + `" class="idea-card">
-	         <h2 class="editable" contenteditable="true">` + task.title + `</h2>
-	         <button class="delete-idea"></button>
-	         <p class="editable idea-body" contenteditable="true">` + task.body + `</p>
-	         <button class="upvote"></button>
-	         <button class="downvote"></button>
-	         <p class= "idea-quality ` + task.importance + `"><span>Quality:</span> <span class="displayed-quality">` + task.importance + `</span> </p>
-	       </article>`);
-	  },
-	  renderArray: function () {
-	    var tasks = this.retrieve();
-	    for (var i = 0; i < 10; i++) {
-	      this.renderTasksToHtml(tasks[i]);
-	    }
-	  }
-	};
-
-	// empty array for 2Dos
-	// add new idea to array
-	// set array to local storage
-	// render ten most recent, event listener will tell funciton to show 10 more
-	// get local storage
-	// find task by ID
-	// clear the DOM
-	// search function
-	// show completed tasks
-	// sort method which filters through array, consider map or filter function
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	function alert() {
-	  alert('it works');
-	}
-
-	module.exports = alert;
 
 /***/ }
 /******/ ]);
