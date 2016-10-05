@@ -70,7 +70,7 @@ function clearInputs() {
 };
 
 //takes input data and creates idea card to display, prepends as article to section designated in html//
-function ideaCard(id, title, body, quality) {
+function ideaCard(task) {
   $('.idea-list').prepend(`
     <article id="`+ id +`" class="idea-card">
       <h2 class="editable" contenteditable="true">` + title + `</h2>
@@ -135,8 +135,8 @@ function downVote() {
 
 //update storage when stuff is edited/clicked in the dom
 $('.idea-list').on('keyup', '.editable', updateStorage);
-$('.idea-list').on('blur', '.upvote', updateStorage);
-$('.idea-list').on('blur', '.downvote', updateStorage);
+$('.idea-list').on('click', '.upvote', updateStorage);
+$('.idea-list').on('click', '.downvote', updateStorage);
 
 //when a user edits an idea in the display, this function pushes those changes to storage//
 function updateStorage() {
