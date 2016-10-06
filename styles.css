@@ -186,6 +186,10 @@ article {
   width: 110px;
 }
 
+.completed-style{
+  background-color: papayawhip;
+}
+
 @media screen and (max-width: 600px){
   .title-input {
     width: 90%;
