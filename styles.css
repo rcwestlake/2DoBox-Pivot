@@ -179,6 +179,13 @@ article {
   margin: auto;
 }
 
+.completed-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 110px;
+}
+
 @media screen and (max-width: 600px){
   .title-input {
     width: 90%;
