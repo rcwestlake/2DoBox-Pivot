@@ -61,7 +61,22 @@ textarea {
   margin: auto;
   margin-bottom: 3%;
   width: 60%;
-};
+}
+
+.show-completed-container {
+  width: 100%;
+}
+
+.show-completed-button {
+  background: #00A79D;
+  border: none;
+  color: #FFFFFF;
+  display: block;
+  font-size: 15px;
+  margin: 30px auto;
+  padding: 10px 0;
+  width: 25%;
+}
 
 .save:hover{
   background: #045E55;
