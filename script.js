@@ -170,7 +170,7 @@ $('.search-field').on('keyup', function(){
 });
 
 function search(searchInput) {
-  if(searchInput !== "") {
+  if (searchInput !== "") {
     $('.idea-list').find('article:not(:contains('+ searchInput + '))').slideUp();
     $('.idea-list').find('article:contains(' + searchInput + ')').slideDown();
   } else {
