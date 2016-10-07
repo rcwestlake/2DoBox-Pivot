@@ -51,6 +51,8 @@
 	var $titleInput = $('.title-input');
 	var $bodyInput = $('.body-input');
 	var $saveButton = $('.save');
+	var $taskList = $('.task-list');
+	var $searchField = $('.search-field');
 	// upvote button
 	// downvote button
 	// remove button
@@ -62,29 +64,50 @@
 	$(document).ready(function () {
 	  TaskArray.populateArray();
 	  TaskArray.renderArray();
-	  debugger;
 	});
 
 	$($saveButton).on('click', function () {
 	  var task = new Task(getTitle(), getBody());
-	  console.log(task);
 	  TaskArray.pushToArray(task);
 	  TaskArray.store();
 	  TaskArray.renderTasksToHtml(task);
 	});
 
-	$('.task-list').on('click', '.remove-task', function (e) {
+	$($taskList).on('click', '.remove-task', function (e) {
 	  var id = parseInt($(this).parent().attr('id'));
 	  TaskArray.findTaskById(id);
 	  TaskArray.removeTask(id);
 	});
 
-	$('.task-list').on('click', '.upvote', function (e) {
-	  console.log(this);
+	$($taskList).on('click', '.upvote', function (e) {
 	  var id = parseInt($(this).parent().attr('id'));
-	  console.log(id);
 	  var task = TaskArray.findTaskById(id);
-	  Task.prototype.upVote(task);
+	  TaskArray.upVote(task);
+	});
+
+	$($taskList).on('click', '.downvote', function (e) {
+	  var id = parseInt($(this).parent().attr('id'));
+	  var task = TaskArray.findTaskById(id);
+	  TaskArray.downVote(task);
+	});
+
+	$($taskList).on('keyup', '.task-title', function () {
+	  var self = this;
+	  var id = parseInt($(this).parent().attr('id'));
+	  var task = TaskArray.findTaskById(id);
+	  TaskArray.updateTitle(task, self);
+	});
+
+	$($taskList).on('keyup', '.task-body', function () {
+	  var self = this;
+	  var id = parseInt($(this).parent().attr('id'));
+	  var task = TaskArray.findTaskById(id);
+	  TaskArray.updateBody(task, self);
+	});
+
+	$($searchField).on('keyup', function () {
+	  var searchInput = $searchField.val();
+	  TaskArray.search(searchInput);
 	});
 
 	function getTitle() {
@@ -148,24 +171,53 @@
 	    }
 	  },
 
-	  // upVote: function(task) {
-	  //     var importance = task.importance;
-	  //     var increaseImportance = {
-	  //       'None': 'Low',
-	  //       'Low': 'Normal',
-	  //       'Normal': 'High',
-	  //       'High': 'Critical'
-	  //     };
-	  //
-	  //     task.importance = increaseImportance[importance];
-	  //
-	  //     TaskArray.store();
-	  //     TaskArray.clearListContainer();
-	  //     TaskArray.renderArray();
-	  // },
+	  upVote: function (task) {
+	    var importance = task.importance;
+	    var increaseImportance = {
+	      'None': 'Low',
+	      'Low': 'Normal',
+	      'Normal': 'High',
+	      'High': 'Critical',
+	      'Critical': 'Critical'
+	    };
+
+	    task.importance = increaseImportance[importance];
+
+	    TaskArray.store();
+	    TaskArray.clearListContainer();
+	    TaskArray.renderArray();
+	  },
+
+	  downVote: function (task) {
+	    var importance = task.importance;
+	    var decreaseImportance = {
+	      'Critical': 'High',
+	      'High': 'Normal',
+	      'Normal': 'Low',
+	      'Low': 'None',
+	      'None': 'None'
+	    };
+
+	    task.importance = decreaseImportance[importance];
+
+	    TaskArray.store();
+	    TaskArray.clearListContainer();
+	    TaskArray.renderArray();
+	  },
+
+	  updateTitle: function (task, self) {
+	    var taskTitle = task.title;
+	    task.title = $(self).text();
+	    TaskArray.store();
+	  },
+
+	  updateBody: function (task, self) {
+	    var taskBody = task.body;
+	    task.body = $(self).text();
+	    TaskArray.store();
+	  },
 
 	  removeTask: function (id) {
-	    debugger;
 	    this.allTasks = this.allTasks.filter(function (i) {
 	      return i.id !== id;
 	    });
@@ -186,7 +238,17 @@
 
 	  allOtherArrays: function (task) {
 	    return task.id !== id;
+	  },
+
+	  search: function (searchInput) {
+	    if (searchInput !== "") {
+	      $('.task-list').find('article:not(:contains(' + searchInput + '))').slideUp();
+	      $('.task-list').find('article:contains(' + searchInput + ')').slideDown();
+	    } else {
+	      $('.task-list').find('article').slideDown();
+	    }
 	  }
+
 	};
 
 	// empty array for 2Dos
@@ -214,36 +276,6 @@
 	  this.id = id || Date.now();
 	  this.importance = importance || 'Normal';
 	}
-
-	Task.prototype.upVote = function (task) {
-	  var importance = task.importance;
-	  debugger;
-	  var increaseImportance = {
-	    'None': 'Low',
-	    'Low': 'Normal',
-	    'Normal': 'High',
-	    'High': 'Critical'
-	  };
-
-	  task.importance = increaseImportance[importance];
-
-	  TaskArray.store();
-	  TaskArray.clearListContainer();
-	  TaskArray.renderArray();
-	};
-
-	Task.prototype.downVote = function () {
-	  var importance = this.importance;
-	  this.importance = increaceImportance[importance];
-
-	  var increaceImportance = {
-	    'Critical': 'High',
-	    'High': 'Normal',
-	    'Normal': 'Low',
-	    'Low': 'None'
-	  };
-	  return tasksArray.store();
-	};
 
 	Task.prototype.editTaskTitle = function () {};
 
