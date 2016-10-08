@@ -115,16 +115,10 @@ describe('attributes on our application',function(){
       taskTitle.setValue('great title')
       taskBody.setValue('great description')
 
-      // assert.equal(taskTitle.getValue(), 'great title')
-      // assert.equal(taskBody.getValue(), 'great description')
-
       browser.click('.save')
 
       taskTitle.setValue('better title')
       taskBody.setValue('better description')
-
-      // assert.equal(taskTitle.getValue(), 'better title')
-      // assert.equal(taskBody.getValue(), 'better description')
 
       browser.click('.save')
       browser.click('.completed-button')
@@ -136,6 +130,17 @@ describe('attributes on our application',function(){
       assert.equal(completedTasks.length, 2)
     });
 
+    it('should have an input counter that counts characters in title and body input fields', function() {
+        browser.url('/')
+        var taskTitle = browser.element(".title-input")
+        var taskBody = browser.element(".body-input")
+
+        taskTitle.setValue('great title')
+        taskBody.setValue('great description')
+
+        assert.equal(browser.getText('.input-counter'), '11')
+        assert.equal(browser.getText('.body-counter'), '17')
+      });
 
 
 
