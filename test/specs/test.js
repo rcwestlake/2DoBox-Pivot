@@ -107,6 +107,39 @@ describe('attributes on our application',function(){
   });
 
 
+  it('should show two completed tasks after the page is refreshed and the show completed todos button is clicked', function() {
+      browser.url('/')
+      var taskTitle = browser.element(".title-input")
+      var taskBody = browser.element(".body-input")
+
+      taskTitle.setValue('great title')
+      taskBody.setValue('great description')
+
+      // assert.equal(taskTitle.getValue(), 'great title')
+      // assert.equal(taskBody.getValue(), 'great description')
+
+      browser.click('.save')
+
+      taskTitle.setValue('better title')
+      taskBody.setValue('better description')
+
+      // assert.equal(taskTitle.getValue(), 'better title')
+      // assert.equal(taskBody.getValue(), 'better description')
+
+      browser.click('.save')
+      browser.click('.completed-button')
+      browser.refresh()
+      browser.click('.show-completed-button')
+
+      var completedTasks = browser.elements('.a-task.true').getText()
+
+      assert.equal(completedTasks.length, 2)
+    });
+
+
+
+
+
   // it('should be able to add my tasks to local storage',function(){
   //     browser.url('/')
   //     var taskTitle = browser.element(".title-input")
