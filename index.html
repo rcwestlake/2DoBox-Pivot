@@ -14,11 +14,11 @@
     <header class="hero">
       <h1 class="hero-title"><span class="teal-h1">2Do</span><span class="grey-h1">Box</span></h1>
 
-      <input type="text" class="title-input" tabindex = "0" placeholder="Title">
-
-      <textarea type="text" class="body-input" tabindex = "0" placeholder="Body"></textarea>
-
-      <button class="save" tabindex = "0">Save</button>
+      <input type="text" class="title-input" tabindex = "0" placeholder="Title" maxlength="120">
+      <p>counter <span class='input-counter'></span></p>
+      <textarea type="text" class="body-input" tabindex = "0" placeholder="Body" maxlength="120"></textarea>
+      <p>counter <span class='body-counter'></span></p>
+      <button class="save" disabled="true" tabindex="0">Save</button>
 
     </header>
 
@@ -30,7 +30,10 @@
     </section>
 
     <section class="sort-importance-container">
-      <button class="dropbtn" tabindex="0">Sort</button>
+      <div class="sort-button-container">
+        <button class="dropbtn" tabindex="0">Sort</button>
+        <button class="dropbtn-hide" tabindex="0">(X)</button>
+      </div>
       <div id="myDropdown" class="dropdown-content">
         <button class="none-button" tabindex="0">None</button>
         <button class="low-button" tabindex="0">Low</button>
@@ -41,6 +44,8 @@
     </section>
 
     <section class="task-list"></section>
+
+    <button class="show-more-button">Show more 2Dos...</button>
 
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
     <script src="main.bundle.js"></script>
