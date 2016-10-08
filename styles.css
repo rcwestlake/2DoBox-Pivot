@@ -71,7 +71,7 @@ textarea {
   background: #045E55;
 }
 
-.show-completed-container {
+.show-completed-container, .sort-button-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,7 +80,7 @@ textarea {
   margin-bottom: 90px;
 }
 
-.show-completed-button, .hide-completed-button, .dropbtn {
+.show-completed-button, .hide-completed-button, .dropbtn, .dropbtn-hide {
   background: #00A79D;
   border: none;
   color: #FFFFFF;
@@ -90,18 +90,18 @@ textarea {
   width: 25%;
 }
 
-.dropbtn {
+.dropbtn, .dropbtn-hide {
   display: block;
 }
 
-.show-completed-button {
+.show-completed-button, .dropbtn {
   position: absolute;
   top: 0;
   right: 50;
   z-index: 10;
 }
 
-.hide-completed-button {
+.hide-completed-button, .dropbtn-hide{
   position: absolute;
   top: 0;
   right: 50;
