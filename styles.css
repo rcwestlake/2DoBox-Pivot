@@ -7,17 +7,16 @@ body {
 }
 
 .hero {
-  font-family: 'Roboto Slab', serif;
+  background-color: #e5f3f2;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  height: 300px;
-  background-color: #E5F3F2;
-}
-
-.hero-title {
-  margin: auto;
-  margin-top: 5%;
-  font-size: 48px;
+  font-family: 'Roboto Slab', serif;
+  flex-wrap: wrap;
+  font-size: 40px;
+  padding-top: 20px;
+  width: 100%;
 }
 
 textarea {
@@ -32,10 +31,19 @@ textarea {
   color: #6D6E71;
 }
 
+.input-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  width: 60vw;
+}
+
 .title-input, .body-input {
   border: 2px solid #D1D3D4;
-  width: 60%;
-  font-size: 100%;
+  width: 100%;
+  font-size: 20px;
   height: 32px;
   margin: auto;
   margin-bottom: 1%;
@@ -47,7 +55,7 @@ textarea {
   border: 2px solid #D1D3D4;
   display: flex;
   flex-direction: column;
-  font-size: 100%;
+  font-size: 20px;
   height: 32px;
   margin: auto;
   margin-top: 3%;
@@ -60,15 +68,22 @@ textarea {
   background: #00A79D;
   border: none;
   color: #FFFFFF;
-  font-size: 100%;
+  font-size: 25px;
   height: 13%;
   margin: auto;
   margin-bottom: 3%;
-  width: 60%;
+  width: 100%;
 }
 
 .save:hover{
   background: #045E55;
+}
+
+.input-counter, .body-counter {
+  color: darkgray;
+  float: right;
+  font-size: 20px;
+  margin-bottom: 4px;
 }
 
 .completed-button {
@@ -243,20 +258,14 @@ article {
 }
 
 @media screen and (max-width: 600px){
-  .title-input {
-    width: 90%;
-    height: 10%;
-  }
   .body-input {
-    width: 90%;
-    height: 30%;
+    height: 50%;
   }
-  .save {
-    width: 90%;
-  }
+
   .search-field {
     width: 90%;
   }
+
   article.a-task {
     width: 90%;
   }
