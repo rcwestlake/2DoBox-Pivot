@@ -222,7 +222,7 @@ article {
 }
 
 .true {
-  background-color: papayawhip;
+  opacity: 0.25;
 }
 
 .dropdown-content {
