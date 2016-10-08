@@ -70,22 +70,42 @@ describe('attributes on our application',function(){
     assert.equal(taskImportance.getText(), 'Critical')
 
   });
+  //
+  // it('should be able to allow tasks to remain in local storage on reload', function(){
+  //   browser.url('/')
+  //   browser.refresh()
+  //
+  //   var allTasks = browser.localStorage('GET', allTasks)
+  //   var allTasks = JSON.parse(allTasks)
+  //   assert.equal(allTasks[0].title, 'great title')
+  //
+  // });
+  //
 
-  it('should be able to allow tasks to remain in local storage on reload', function(){
-    browser.url('/')
-    browser.refresh()
-
-    var allTasks = browser.localStorage('GET', allTasks)
-    assert.equal(allTasks[0].title, 'great title')
-
-  });
-
-  it('should be able to delete a single task from the page', function(){
+  it('should be able to delete a single task from the page with remove button', function(){
     browser.url('/')
     browser.click('.remove-task')
 
-    assert.equal(browser.isExisting('.task'), false );
-  })
+    assert.equal(browser.isExisting('.a-task.true.false'), false );
+  });
+
+  it('should have the class of .true.false if the completed task button is clicked', function() {
+    browser.url('/')
+    var taskTitle = browser.element(".title-input")
+    var taskBody = browser.element(".body-input")
+
+    taskTitle.setValue('great title')
+    taskBody.setValue('great description')
+
+    assert.equal(taskTitle.getValue(), 'great title')
+    assert.equal(taskBody.getValue(), 'great description')
+
+    browser.click('.save')
+    browser.click('.completed-button')
+
+    assert.equal(browser.isExisting('.a-task.true.false'), true)
+  });
+
 
   // it('should be able to add my tasks to local storage',function(){
   //     browser.url('/')
