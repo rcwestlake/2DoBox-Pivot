@@ -64,18 +64,39 @@ textarea {
 }
 
 .show-completed-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
   width: 100%;
+  margin-bottom: 90px;
 }
 
-.show-completed-button, .remove-completed-button, .dropbtn {
+.show-completed-button, .hide-completed-button, .dropbtn {
   background: #00A79D;
   border: none;
   color: #FFFFFF;
-  display: block;
   font-size: 15px;
   margin: 30px auto;
   padding: 10px 0;
   width: 25%;
+}
+
+.dropbtn {
+  display: block;
+}
+
+.show-completed-button {
+  position: absolute;
+  top: 0;
+  right: 50;
+  z-index: 10;
+}
+
+.hide-completed-button {
+  position: absolute;
+  top: 0;
+  right: 50;
 }
 
 .save:hover{
