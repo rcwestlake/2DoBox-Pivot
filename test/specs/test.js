@@ -11,24 +11,25 @@ describe('attributes on our application',function(){
 
     assert.equal(taskTitle.getValue(), 'great title')
     assert.equal(taskBody.getValue(), 'great body')
-  })
-});
+  });
 
-it('should be able to add my tasks to the page',function(){
+  it('should be able to add my tasks to the page',function(){
 
-    browser.url('/')
-    var taskTitle = browser.element(".title-input")
-    var taskBody = browser.element(".body-input")
+      browser.url('/')
+      var taskTitle = browser.element(".title-input")
+      var taskBody = browser.element(".body-input")
 
-    taskTitle.setValue('great title')
-    taskBody.setValue('great description')
+      taskTitle.setValue('great title')
+      taskBody.setValue('great description')
 
-    assert.equal(taskTitle.getValue(), 'great title')
-    assert.equal(taskBody.getValue(), 'great description')
+      assert.equal(taskTitle.getValue(), 'great title')
+      assert.equal(taskBody.getValue(), 'great description')
 
-    browser.click('.save')
+      browser.click('.save')
 
-    var allTasks = browser.getText('.task-title')
-    assert.equal(allTasks.replace(/\n/g, ", "), 'great title')
+      var allTasks = browser.getText('.task-title')
+      assert.equal(allTasks.replace(/\n/g, ", "), 'great title')
+
+  });
 
 });
