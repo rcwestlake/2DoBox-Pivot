@@ -22,9 +22,6 @@ describe('attributes on our application',function(){
       taskTitle.setValue('great title')
       taskBody.setValue('great description')
 
-      assert.equal(taskTitle.getValue(), 'great title')
-      assert.equal(taskBody.getValue(), 'great description')
-
       browser.click('.save')
 
       var allTasks = browser.getText('.task-title')
@@ -70,7 +67,27 @@ describe('attributes on our application',function(){
     assert.equal(taskImportance.getText(), 'Critical')
 
   });
-  //
+
+  it('should have an editable title that can receive values and persist on the page', function() {
+      browser.url('/')
+
+      var taskTitle = browser.element('.task-title')
+      browser.click('.task-title')
+      taskTitle.setValue('better title')
+
+      assert.equal(browser.getText('.task-title'), 'better title')
+    });
+
+    it('should have an editable body that can receive values and persist on the page', function() {
+        browser.url('/')
+
+        var taskTitle = browser.element('.task-body')
+        browser.click('.task-body')
+        taskTitle.setValue('better body')
+
+        assert.equal(browser.getText('.task-body'), 'better body')
+      });
+
   // it('should be able to allow tasks to remain in local storage on reload', function(){
   //   browser.url('/')
   //   browser.refresh()
@@ -145,6 +162,8 @@ describe('attributes on our application',function(){
 
 
 
+
+
   // it('should be able to add my tasks to local storage',function(){
   //     browser.url('/')
   //     var taskTitle = browser.element(".title-input")
@@ -166,10 +185,7 @@ describe('attributes on our application',function(){
 
   // TODO: editing an existing to do (body and title)
   // Searching - should filter just the tasks containing the input value
-  // Make as complete (css should be a certain way)
-  // critical, high, normal, low, non importance
   // should only show ten most recent
   // filter by importance
-  // character counter - disabled if
 
 });
