@@ -23,7 +23,7 @@ button {
 
 textarea {
   border: $hide-border;
-  resize: none;
+  resize: $display-none;
 }
 
 .teal-h1 {
@@ -64,7 +64,7 @@ textarea {
 
 .save {
   background: $primary-green;
-  border: none;
+  border: $hide-border;
   color: $white;
   font-size: $logo-font-size/2 + 5;
   height: 13%;
@@ -101,7 +101,7 @@ textarea {
   border: $hide-border;
   color: $white;
   font-size: $logo-font-size/2 - 5;
-  margin: 30px auto;
+  margin: 30px $display-auto;
   padding: 10px 0;
   width: $main-width/4;
 }
@@ -111,39 +111,33 @@ textarea {
 }
 
 .show-completed-button, .dropbtn {
-  position: absolute;
-  top: 0;
-  right: 50;
+  @include showAndSortPosition;
   z-index: 10;
 }
 
 .hide-completed-button, .dropbtn-hide{
-  position: absolute;
-  top: 0;
-  right: 50;
+  @include showAndSortPosition;
 }
 
 .show-more-button {
-  background: none;
+  background: $display-none;
   border: $hide-border;
   border-bottom: 2px solid $black;
-  display: none;
-  margin: 50px auto;
+  display: $display-none;
+  margin: 50px $display-auto;
   width: 150px;
 }
 
-
-article {
-  width: 60%;
-}
 
 .a-task {
   display: $display-flex;
   flex-direction: column;
   position: relative;
   border-bottom: $input-border;
-  margin: auto;
+  margin: $display-auto;
+  min-height: 110px;
   padding: 15px 0;
+  width: 60%;
 }
 
 .task-body {
@@ -151,7 +145,7 @@ article {
 }
 
 .a-task h2 {
-  font-size: 24px;
+  font-size: $logo-font-size/2 + 4;
   color: $dark-gray;
   font-family: $primary-font;
 }
@@ -166,41 +160,41 @@ article {
 .task-importance {
   font-family: $primary-font;
   color: $dark-gray;
-  display: inline-block;
-  padding-left: 15px;
+  position: absolute;
+  bottom: 8%;
 }
 
 .remove-task {
   position: absolute;
-  z-index: 99;
+  z-index: $mid-z-index;
   top: 2%;
   right: 2%;
   background: url(../Images/delete.svg) no-repeat;
   border: $hide-border;
-  height: 20px;
-  width: 20px;
+  height: $small-button-height;
+  width: $small-button-width;
 }
 
 .remove-task:hover {
   background: url(../Images/delete-hover.svg) no-repeat;
   border: $hide-border;
-  z-index: 99;
+  z-index: $mid-z-index;
 }
 
 .upvote {
   background: url(../Images/upvote.svg) no-repeat;
   border: $hide-border;
   position: absolute;
-  bottom: 10%;
+  bottom: 25%;
   height: $small-button-height;
   width: $small-button-width;
-  z-index: 99;
+  z-index: $mid-z-index;
 }
 
 .upvote:hover {
   background: url(../Images/upvote-hover.svg) no-repeat;
   border: $hide-border;
-  z-index: 99;
+  z-index: $mid-z-index;
 }
 
 .downvote {
@@ -209,20 +203,15 @@ article {
   height: $small-button-height;
   width: $small-button-width;
   position: absolute;
-  bottom: $main-width/10;
-  left: 8%;
-  z-index: 99;
+  bottom: 25%;
+  left: 5%;
+  z-index: $mid-z-index;
 }
 
 .downvote:hover {
   background: url(../Images/downvote-hover.svg) no-repeat;
   border: $hide-border;
-  z-index: 99;
-}
-
-.task-importance {
-  display: absolute;
-  margin: auto;
+  z-index: $mid-z-index;
 }
 
 .completed-button {
@@ -237,7 +226,7 @@ article {
 }
 
 .dropdown-content {
-  display: none;
+  display: $display-none;
   width: 100%;
 }
 
