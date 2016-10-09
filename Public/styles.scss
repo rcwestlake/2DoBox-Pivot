@@ -14,7 +14,7 @@ button {
   @include flex-layout;
   flex-direction: column;
   flex-wrap: wrap;
-  background-color: #e5f3f2;
+  background-color: $off-white;
   font-family: $primary-font;
   font-size: 40px;
   padding-top: 20px;
@@ -30,7 +30,7 @@ textarea {
   color: $primary-green;
 }
 .grey-h1 {
-  color: #6D6E71;
+  color: $dark-gray;
 }
 
 .input-container {
@@ -65,7 +65,7 @@ textarea {
 .save {
   background: $primary-green;
   border: none;
-  color: #FFFFFF;
+  color: $white;
   font-size: 25px;
   height: 13%;
   margin: auto;
@@ -78,7 +78,7 @@ textarea {
 }
 
 .input-counter, .body-counter {
-  color: darkgray;
+  color: $light-gray;
   float: right;
   font-size: 20px;
   margin-bottom: 4px;
@@ -86,7 +86,7 @@ textarea {
 
 .completed-button {
   background-color: $primary-green;
-  color: white;
+  color: $white;
 }
 
 .show-completed-container, .sort-button-container {
@@ -97,9 +97,9 @@ textarea {
 }
 
 .show-completed-button, .hide-completed-button, .dropbtn, .dropbtn-hide {
-  background: #00A79D;
+  background: $primary-green;
   border: none;
-  color: #FFFFFF;
+  color: $white;
   font-size: 15px;
   margin: 30px auto;
   padding: 10px 0;
@@ -126,7 +126,7 @@ textarea {
 .show-more-button {
   background: none;
   border: none;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid $black;
   display: none;
   margin: 50px auto;
   width: 150px;
@@ -152,12 +152,12 @@ article {
 
 .a-task h2 {
   font-size: 24px;
-  color: #6D6E71;
+  color: $dark-gray;
   font-family: $primary-font;
 }
 
 .task-body, .task-title {
-  color: #939598;
+  color: $light-gray;
   display: inline-block;
   outline: 0px solid transparent;
   padding-bottom: 15px;
@@ -165,7 +165,7 @@ article {
 
 .task-importance {
   font-family: $primary-font;
-  color: #6D6E71;
+  color: $dark-gray;
   display: inline-block;
   padding-left: 15px;
 }
