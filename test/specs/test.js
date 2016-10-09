@@ -81,12 +81,39 @@ describe('attributes on our application',function(){
     it('should have an editable body that can receive values and persist on the page', function() {
         browser.url('/')
 
-        var taskTitle = browser.element('.task-body')
+        var taskBody = browser.element('.task-body')
         browser.click('.task-body')
-        taskTitle.setValue('better body')
+        taskBody.setValue('better body')
 
         assert.equal(browser.getText('.task-body'), 'better body')
       });
+
+      it('should have a search function that will display only the tasks that have the search input text for their title or body', function() {
+          browser.url('/')
+
+          var taskTitle = browser.element(".title-input")
+          var taskBody = browser.element(".body-input")
+
+          taskTitle.setValue('greatest title')
+          taskBody.setValue('greatest description')
+          browser.click('.save')
+
+          var searchField = browser.element('.search-field')
+          searchField.setValue('great')
+
+          var allTasksVisible = browser.isVisibleWithinViewport('.a-task.false')
+
+
+          assert.equal(allTasksVisible.length, 2)
+
+
+
+
+
+          // assert.equal(browser.getText('.task-body'), 'better body')
+        });
+
+
 
   // it('should be able to allow tasks to remain in local storage on reload', function(){
   //   browser.url('/')
@@ -183,8 +210,7 @@ describe('attributes on our application',function(){
   // });
 
 
-  // TODO: editing an existing to do (body and title)
-  // Searching - should filter just the tasks containing the input value
+  // TODO:
   // should only show ten most recent
   // filter by importance
 
