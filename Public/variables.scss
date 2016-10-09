@@ -4,11 +4,15 @@
 $display-flex: flex;
 $justify-center: center;
 $align-center: center;
+$main-width: 100%;
 $input-width: 60%;
+$small-button-height: 20px;
+$small-button-width: 20px;
 
 //fonts
 $primary-font: 'Roboto Slab', serif;
 $task-font: 'Open Sans', sans-serif;
+$logo-font-size: 40px;
 
 //colors
 $primary-green: #00A79D;
@@ -24,3 +28,6 @@ $input-border: 2px solid #D1D3D4;
 
 //other styles
 $complete-opacity: 0.25;
+$hide-border: none;
+$indent-text: 10px;
+$little-margin: 3%;
