@@ -1,18 +1,21 @@
+@import "reset";
+@import "variables";
+
+body {
+  font-family: $primary-font;
+}
+
 button {
   cursor: pointer;
 }
 
-body {
-  font-family: 'Roboto Slab', serif;
-}
-
 .hero {
   background-color: #e5f3f2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: $display-flex;
+  justify-content: $justify-center;
+  align-items: $align-center;
   flex-direction: column;
-  font-family: 'Roboto Slab', serif;
+  font-family: $primary-font;
   flex-wrap: wrap;
   font-size: 40px;
   padding-top: 20px;
@@ -25,7 +28,7 @@ textarea {
 }
 
 .teal-h1 {
-  color: #00A79D;
+  color: $primary-green;
 }
 .grey-h1 {
   color: #6D6E71;
@@ -33,15 +36,15 @@ textarea {
 
 .input-container {
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: $justify-center;
+  align-items: $align-center;
   flex-wrap: wrap;
   margin-top: 20px;
-  width: 60vw;
+  width: $input-width;
 }
 
 .title-input, .body-input {
-  border: 2px solid #D1D3D4;
+  border: $input-border;
   width: 100%;
   font-size: 20px;
   height: 32px;
@@ -52,8 +55,8 @@ textarea {
 }
 
 .search-field {
-  border: 2px solid #D1D3D4;
-  display: flex;
+  border: $input-border;
+  display: $display-flex;
   flex-direction: column;
   font-size: 20px;
   height: 32px;
@@ -61,11 +64,11 @@ textarea {
   margin-top: 3%;
   margin-bottom: 3%;
   text-indent: 3%;
-  width: 60%;
+  width: $input-width;
 }
 
 .save {
-  background: #00A79D;
+  background: $primary-green;
   border: none;
   color: #FFFFFF;
   font-size: 25px;
@@ -76,7 +79,7 @@ textarea {
 }
 
 .save:hover{
-  background: #045E55;
+  background: $primary-hover;
 }
 
 .input-counter, .body-counter {
@@ -87,14 +90,14 @@ textarea {
 }
 
 .completed-button {
-  background-color: #00A79D;
+  background-color: $primary-green;
   color: white;
 }
 
 .show-completed-container, .sort-button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: $display-flex;
+  justify-content: $justify-center;
+  align-items: $align-center;
   position: relative;
   width: 100%;
   margin-bottom: 90px;
@@ -143,8 +146,8 @@ article {
 
 .a-task {
   position: relative;
-  border-bottom: 2px solid #D1D3D4;
-  display: flex;
+  border-bottom: $input-border;
+  display: $display-flex;
   flex-direction: column;
   height: 20%;
   margin-top: 5%;
@@ -154,13 +157,13 @@ article {
 }
 
 .task-body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: $task-font;
 }
 
 .a-task h2 {
   font-size: 24px;
   color: #6D6E71;
-  font-family: 'Roboto Slab', serif;
+  font-family: $primary-font;
 }
 
 .task-body, .task-title {
@@ -171,7 +174,7 @@ article {
 }
 
 .task-importance {
-  font-family: 'Roboto Slab', serif;
+  font-family: $primary-font;
   color: #6D6E71;
   display: inline-block;
   padding-left: 15px;
@@ -242,7 +245,7 @@ article {
 }
 
 .true {
-  opacity: 0.25;
+  opacity: $complete-opacity;
 }
 
 .dropdown-content {
@@ -251,10 +254,10 @@ article {
 }
 
 .show {
-  display: flex;
+  display: $display-flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  justify-content: $justify-center;
+  align-items: $align-center;
 }
 
 @media screen and (max-width: 600px){
