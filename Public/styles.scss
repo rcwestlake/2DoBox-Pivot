@@ -1,5 +1,6 @@
 @import "reset";
 @import "variables";
+@import "mixins";
 
 body {
   font-family: $primary-font;
@@ -10,13 +11,11 @@ button {
 }
 
 .hero {
-  background-color: #e5f3f2;
-  display: $display-flex;
-  justify-content: $justify-center;
-  align-items: $align-center;
+  @include flex-layout;
   flex-direction: column;
-  font-family: $primary-font;
   flex-wrap: wrap;
+  background-color: #e5f3f2;
+  font-family: $primary-font;
   font-size: 40px;
   padding-top: 20px;
   width: 100%;
@@ -35,10 +34,6 @@ textarea {
 }
 
 .input-container {
-  flex-direction: column;
-  justify-content: $justify-center;
-  align-items: $align-center;
-  flex-wrap: wrap;
   margin-top: 20px;
   width: $input-width;
 }
@@ -55,9 +50,9 @@ textarea {
 }
 
 .search-field {
-  border: $input-border;
-  display: $display-flex;
+  @include flex-layout;
   flex-direction: column;
+  border: $input-border;
   font-size: 20px;
   height: 32px;
   margin: auto;
@@ -95,9 +90,7 @@ textarea {
 }
 
 .show-completed-container, .sort-button-container {
-  display: $display-flex;
-  justify-content: $justify-center;
-  align-items: $align-center;
+  @include flex-layout;
   position: relative;
   width: 100%;
   margin-bottom: 90px;
@@ -145,15 +138,12 @@ article {
 }
 
 .a-task {
-  position: relative;
-  border-bottom: $input-border;
   display: $display-flex;
   flex-direction: column;
-  height: 20%;
-  margin-top: 5%;
+  position: relative;
+  border-bottom: $input-border;
   margin: auto;
   padding: 15px 0;
-  width: 60%;
 }
 
 .task-body {
@@ -185,8 +175,6 @@ article {
   z-index: 99;
   top: 2%;
   right: 2%;
-  float: right;
-  display: inline-block;
   background: url(../Images/delete.svg) no-repeat;
   border: none;
   height: 20px;
@@ -254,10 +242,8 @@ article {
 }
 
 .show {
-  display: $display-flex;
+  @include flex-layout
   flex-direction: row;
-  justify-content: $justify-center;
-  align-items: $align-center;
 }
 
 @media screen and (max-width: 600px){
