@@ -59,14 +59,49 @@ describe('attributes on our application',function(){
 
   });
 
-  it('should be able to allow tasks to persist on reload', function() {
+  it('should not be able to upvote the importance of a task past critical', function() {
     browser.url('/')
-    browser.refresh()
+
+    browser.click('.upvote')
+    browser.click('.upvote')
+    browser.click('.upvote')
 
     var taskImportance = browser.element('.displayed-importance')
     assert.equal(taskImportance.getText(), 'Critical')
 
   });
+
+  it('should not be able to downvote the importance of a task past none', function() {
+    browser.url('/')
+
+    browser.click('.downvote')
+    browser.click('.downvote')
+    browser.click('.downvote')
+    browser.click('.downvote')
+    browser.click('.downvote')
+
+    var taskImportance = browser.element('.displayed-importance')
+    assert.equal(taskImportance.getText(), 'None')
+
+  });
+
+  it('should be able to allow tasks to persist on reload', function() {
+    browser.url('/')
+    browser.refresh()
+
+    var taskImportance = browser.element('.displayed-importance')
+    assert.equal(taskImportance.getText(), 'None')
+
+  });
+
+  it('should have a sort button that sorts tasks based on importance (if the sort:none button is clicked, it should only show tasks with the importance of none)', function(){
+    browser.url('/')
+    browser.click('.dropbtn')
+    browser.click('.none-button')
+
+    var taskImportance = browser.element('.displayed-importance')
+    assert.equal(taskImportance.getText(), 'None')
+  })
 
   it('should have an editable title that can receive values and persist on the page', function() {
       browser.url('/')
@@ -186,32 +221,7 @@ describe('attributes on our application',function(){
         assert.equal(browser.getText('.body-counter'), '17')
       });
 
-
-
-
-
-
-  // it('should be able to add my tasks to local storage',function(){
-  //     browser.url('/')
-  //     var taskTitle = browser.element(".title-input")
-  //     var taskBody = browser.element(".body-input")
-  //
-  //     taskTitle.setValue('great title')
-  //     taskBody.setValue('great description')
-  //
-  //     assert.equal(taskTitle.getValue(), 'great title')
-  //     assert.equal(taskBody.getValue(), 'great description')
-  //
-  //     browser.click('.save')
-  //
-      // var allTasks = client.localStorage('GET', allTasks)
-      // assert.equal(allTasks[1].title.replace(/\n/g, ", "), 'great title')
-  //
-  // });
-
-
   // TODO:
   // should only show ten most recent
-  // filter by importance
 
 });
