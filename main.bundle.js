@@ -46,24 +46,27 @@
 
 	var TaskArray = __webpack_require__(1);
 	var Task = __webpack_require__(2);
+	__webpack_require__(4);
+	__webpack_require__(8);
 
-	// define globals for main functions
 	var $titleInput = $('.title-input');
 	var $bodyInput = $('.body-input');
 	var $saveButton = $('.save');
 	var $taskList = $('.task-list');
 	var $searchField = $('.search-field');
-	// upvote button
-	// downvote button
-	// remove button
 	// completed tasks button
 
 
-	// input field character counter
-
 	$(document).ready(function () {
 	  TaskArray.populateArray();
-	  TaskArray.renderArray();
+	  TaskArray.renderUncompletedTasks(10, 0);
+
+	  if (TaskArray.allTasks.length < 1) {
+	    $('.show-completed-button').hide();
+	    $('.hide-completed-button').hide();
+	    $('.dropbtn').hide();
+	    $('.dropbtn-hide').hide();
+	  }
 	});
 
 	$($saveButton).on('click', function () {
@@ -71,24 +74,52 @@
 	  TaskArray.pushToArray(task);
 	  TaskArray.store();
 	  TaskArray.renderTasksToHtml(task);
+
+	  if (TaskArray.allTasks.length > 0) {
+	    $('.show-completed-button').show();
+	    $('.hide-completed-button').show();
+	    $('.dropbtn').show();
+	    $('.dropbtn-hide').show();
+	  }
+
+	  if (TaskArray.allTasks.length > 10) {
+	    hideLastTask();
+	    $('.show-more-button').addClass('show');
+	  }
+	  TaskArray.clearInputs();
+	  TaskArray.toggleButton();
 	});
 
 	$($taskList).on('click', '.remove-task', function (e) {
 	  var id = parseInt($(this).parent().attr('id'));
 	  TaskArray.findTaskById(id);
 	  TaskArray.removeTask(id);
+
+	  var theTask = $(this).parent().remove();
+
+	  if (TaskArray.allTasks.length > 10) {
+	    $('.show-more-button').addClass('show');
+	  } else {
+	    $('.show-more-button').removeClass('show');
+	  }
 	});
 
 	$($taskList).on('click', '.upvote', function (e) {
 	  var id = parseInt($(this).parent().attr('id'));
 	  var task = TaskArray.findTaskById(id);
 	  TaskArray.upVote(task);
+	  var taskArticle = $('#' + id);
+	  var taskImportance = taskArticle.find('.displayed-importance');
+	  taskImportance[0].textContent = task.importance;
 	});
 
 	$($taskList).on('click', '.downvote', function (e) {
 	  var id = parseInt($(this).parent().attr('id'));
 	  var task = TaskArray.findTaskById(id);
 	  TaskArray.downVote(task);
+	  var taskArticle = $('#' + id);
+	  var taskImportance = taskArticle.find('.displayed-importance');
+	  taskImportance[0].textContent = task.importance;
 	});
 
 	$($taskList).on('keyup', '.task-title', function () {
@@ -105,10 +136,93 @@
 	  TaskArray.updateBody(task, self);
 	});
 
+	$($taskList).on('click', '.completed-button', function () {
+	  var id = parseInt($(this).parent().attr('id'));
+	  var task = TaskArray.findTaskById(id);
+	  TaskArray.markCompleted(task);
+	});
+
 	$($searchField).on('keyup', function () {
 	  var searchInput = $searchField.val();
 	  TaskArray.search(searchInput);
 	});
+
+	$(".body-input, .title-input").on('keyup', function () {
+	  TaskArray.toggleButton();
+	});
+
+	$('.title-input').on('keyup', function () {
+	  TaskArray.inputCounter();
+	});
+
+	$('.body-input').on('keyup', function () {
+	  TaskArray.bodyCounter();
+	});
+
+	$('.show-completed-button').on('click', function () {
+	  if (TaskArray.allTasks.length > 0) {
+	    $(this).fadeOut('fast');
+	    $('.hide-completed-button').fadeIn('fast');
+	    TaskArray.clearListContainer();
+	    TaskArray.sortTasksByCompleted();
+	    TaskArray.renderUncompletedTasks(10, 0);
+	    TaskArray.renderCompletedTasks();
+	  }
+	});
+
+	$('.hide-completed-button').on('click', function () {
+	  $(this).fadeOut('fast');
+	  $('.show-completed-button').fadeIn('fast');
+	  TaskArray.clearListContainer();
+	  TaskArray.sortTasksByCompleted();
+	  TaskArray.renderUncompletedTasks(10, 0);
+	});
+
+	$($taskList).on('click', '.completed-button', function () {
+	  $(this).parent().toggleClass('true');
+	});
+
+	$('.dropbtn').on('click', function () {
+	  $(this).fadeOut('fast');
+	  $('.dropbtn-hide').fadeIn('fast');
+	  showSortOptions();
+	});
+
+	$('.dropbtn-hide').on('click', function () {
+	  $(this).fadeOut('fast');
+	  $('.dropbtn').fadeIn('fast');
+	  showSortOptions();
+	  TaskArray.filterAll();
+	});
+
+	$('.show-more-button').on('click', function () {
+	  TaskArray.renderUncompletedTasksAppend(TaskArray.allTasks.length, 10);
+	  if ($('.task-list > article').length === TaskArray.allTasks.length) {
+	    $('.show-more-button').hide();
+	  }
+	});
+
+	/*filters based on importance level*/
+	$('.none-button, .low-button, .normal-button, .high-button, .critical-button').on('click', function () {
+	  var specificButton = $(this).text();
+	  TaskArray.filterByImportance(specificButton);
+	});
+
+	/*filters based on importance level*/
+	$('.none-button, .low-button, .normal-button, .high-button, .critical-button').on('click', function () {
+	  var specificButton = $(this).text();
+	  TaskArray.filterByImportance(specificButton);
+	});
+
+	/*Sort function called on click to show options*/
+	function showSortOptions() {
+	  $('#myDropdown').toggleClass('show');
+	}
+
+	/*hides oldest task to keep 10 on page*/
+	function hideLastTask() {
+	  $('article:last-child').hide();
+	}
 
 	function getTitle() {
 	  var taskTitle = $titleInput.val();
@@ -138,36 +252,75 @@
 	  store: function () {
 	    localStorage.setItem('allTasks', JSON.stringify(this.allTasks));
 	  },
+
 	  retrieve: function () {
 	    return JSON.parse(localStorage.getItem("allTasks"));
 	  },
+
 	  renderTasksToHtml: function (task) {
 	    $('.task-list').prepend(`
-	       <article id="` + task.id + `" class="a-task">
+	       <article id="` + task.id + `" class="a-task ` + task.completed + `">
 	         <h2 class="task-title" contenteditable="true">` + task.title + `</h2>
-	         <button class="remove-task"></button>
-	         <p class="task-body" contenteditable="true">` + task.body + `</p>
-	         <button class="upvote"></button>
-	         <button class="downvote"></button>
-	         <p class= "task-importance ` + task.importance + `"><span>Importance:</span> <span class="displayed-importance">` + task.importance + `</span> </p>
+	         <button class="remove-task" aria-label='Remove task' value="remove-button"></button>
+	         <h5 class="task-body" contenteditable="true">` + task.body + `</h5>
+	         <button class="upvote" aria-label='Increase task importance' value="upvote-button" alt="Button with arrow pointing upwards to tell user to increase importance"></button>
+	         <button class="downvote" aria-label='Decrease task importance' value="downvote-button"></button>
+	         <h6 class= "task-importance ` + task.importance + `" tabindex="0"><span>Importance:</span> <span class="displayed-importance" tabindex="0">` + task.importance + `</span> </h6>
+	         <button class="completed-button" aria-label='Mark task completed' value="completed-button"></button>
+	       </article>`);
+	  },
+
+	  renderTasksToHtmlAppend: function (task) {
+	    $('.task-list').append(`
+	       <article id="` + task.id + `" class="a-task ` + task.completed + `">
+	         <h2 class="task-title" contenteditable="true">` + task.title + `</h2>
+	         <button class="remove-task" aria-label='Remove task' value="remove-button"></button>
+	         <h5 class="task-body" contenteditable="true">` + task.body + `</h5>
+	         <button class="upvote" aria-label='Increase task importance' value="upvote-button" alt="Button with arrow pointing upwards to tell user to increase importance"></button>
+	         <button class="downvote" aria-label='Decrease task importance' value="downvote-button"></button>
+	         <h6 class= "task-importance ` + task.importance + `" tabindex="0"><span>Importance:</span> <span class="displayed-importance" tabindex="0">` + task.importance + `</span> </h6>
+	         <button class="completed-button" aria-label='Mark task completed' value="completed-button">Task Completed</button>
 	       </article>`);
 	  },
 
 	  populateArray: function () {
 	    var tasks = this.retrieve();
-	    for (var i = 0; i < tasks.length; i++) {
-	      var object = tasks[i];
-	      var task = new Task(object.title, object.body, object.id, object.importance);
-	      this.pushToArray(task);
+	    if (tasks) {
+	      for (var i = 0; i < tasks.length; i++) {
+	        var object = tasks[i];
+	        var task = new Task(object.title, object.body, object.id, object.importance, object.completed);
+	        this.pushToArray(task);
+	      }
 	    }
 	  },
 
-	  renderArray: function () {
+	  renderCompletedTasks: function () {
 	    var tasks = this.allTasks;
-	    if (tasks.length < 10) {
-	      for (var i = 0; i < tasks.length; i++) {
-	        this.renderTasksToHtml(tasks[i]);
-	      }
+	    var completedTasks = tasks.filter(function (i) {
+	      return i.completed === true;
+	    });
+	    completedTasks.forEach(this.renderTasksToHtml);
+	  },
+
+	  renderUncompletedTasks: function (start, end) {
+	    var tasks = this.sliceArray(start, end);
+	    var uncompletedTasks = tasks.filter(function (i) {
+	      return i.completed === false;
+	    });
+	    uncompletedTasks.forEach(this.renderTasksToHtml);
+	    if (tasks.length >= 10) {
+	      $('.show-more-button').addClass('show');
+	    }
+	  },
+
+	  renderUncompletedTasksAppend: function (start, end) {
+	    var tasks = this.sliceArray(start, end);
+	    var uncompletedTasks = tasks.reverse().filter(function (i) {
+	      return i.completed === false;
+	    });
+	    uncompletedTasks.forEach(this.renderTasksToHtmlAppend);
+	    if (tasks.length >= 10) {
+	      $('.show-more-button').addClass('show');
 	    }
 	  },
 
@@ -184,8 +337,6 @@
 	    task.importance = increaseImportance[importance];
 
 	    TaskArray.store();
-	    TaskArray.clearListContainer();
-	    TaskArray.renderArray();
 	  },
 
 	  downVote: function (task) {
@@ -201,8 +352,6 @@
 	    task.importance = decreaseImportance[importance];
 
 	    TaskArray.store();
-	    TaskArray.clearListContainer();
-	    TaskArray.renderArray();
 	  },
 
 	  updateTitle: function (task, self) {
@@ -222,12 +371,46 @@
 	      return i.id !== id;
 	    });
 	    this.store();
-	    this.clearListContainer();
-	    this.renderArray();
+	  },
+
+	  markCompleted: function (task) {
+	    var currentState = task.completed;
+	    var changeImportance = {
+	      true: false,
+	      false: true
+	    };
+
+	    task.completed = changeImportance[currentState];
+	    this.store();
+	  },
+
+	  sortTasksByCompleted: function () {
+	    var sortedArray = this.allTasks.sort(function (a, b) {
+	      var truthy = a.completed;
+	      var falsey = b.completed;
+	      if (truthy > falsey) {
+	        return 1;
+	      }
+	      if (truthy < falsey) {
+	        return -1;
+	      }
+	      return 0;
+	    });
+	    return sortedArray;
+	  },
+
+	  sliceArray: function (start, end) {
+	    if (this.allTasks) {
+	      return this.allTasks.slice(this.allTasks.length - start, this.allTasks.length - end);
+	    }
 	  },
 
 	  clearListContainer: function () {
 	    $('.a-task').remove();
+	  },
+
+	  clearUncompleteList: function () {
+	    $('.false').remove();
 	  },
 
 	  findTaskById: function (id) {
@@ -247,20 +430,41 @@
 	    } else {
 	      $('.task-list').find('article').slideDown();
 	    }
-	  }
+	  },
 
+	  filterByImportance: function (specificButton) {
+	    $('.task-list').find('article:not(:contains(' + specificButton + '))').slideUp();
+	    $('.task-list').find('article:contains(' + specificButton + ')').slideDown();
+	  },
+
+	  filterAll: function () {
+	    $('.task-list').find('article').slideDown();
+	  },
+
+	  clearInputs: function () {
+	    $('.title-input').val('');
+	    $('.body-input').val('');
+	  },
+
+	  toggleButton: function () {
+	    if ($(".title-input").val().length > 0 && $(".body-input").val().length > 0) {
+	      $('.save').attr("disabled", false);
+	    } else {
+	      $('.save').attr('disabled', true);
+	    }
+	  },
+
+	  inputCounter: function () {
+	    var len = $('.title-input').val().length;
+	    $('.input-counter').html(len);
+	  },
+
+	  bodyCounter: function () {
+	    var len = $('.body-input').val().length;
+	    $('.body-counter').html(len);
+	  }
 	};
 
-	// empty array for 2Dos
-	// add new idea to array
-	// set array to local storage
-	// render ten most recent, event listener will tell funciton to show 10 more
-	// get local storage
-	// find task by ID
-	// clear the DOM
-	// search function
-	// show completed tasks
-	// sort method which filters through array, consider map or filter function
 	module.exports = TaskArray;
 
 /***/ },
@@ -270,16 +474,13 @@
 	var TaskArray = __webpack_require__(1);
 	var $ = __webpack_require__(3);
 
-	function Task(title, body, id, importance) {
+	function Task(title, body, id, importance, completed) {
 	  this.title = title;
 	  this.body = body;
 	  this.id = id || Date.now();
 	  this.importance = importance || 'Normal';
+	  this.completed = completed || false;
 	}
-
-	Task.prototype.editTaskTitle = function () {};
-
-	Task.prototype.editTaskBody = function () {};
 
 	Task.prototype.addComparedTaskClass = function () {
 	  var specificTask = $(this).closest('.task'); // confirm this is the right hierarcy and class name
@@ -1946,6 +2147,439 @@
 	// (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
 	// and CommonJS for browser emulators (#13566)
 	if(!noGlobal){window.jQuery=window.$=jQuery;}return jQuery;});
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(5);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./reset.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./reset.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function () {
+		var list = [];
+
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for (var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if (item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+
+		// import a list of modules into the list
+		list.i = function (modules, mediaQuery) {
+			if (typeof modules === "string") modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for (var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if (typeof id === "number") alreadyImportedModules[id] = true;
+			}
+			for (i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if (typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if (mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if (mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+
+		update(obj);
+
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+
+	var replaceText = (function () {
+		var textStore = [];
+
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+
+		var blob = new Blob([css], { type: "text/css" });
+
+		var oldSrc = linkElement.href;
+
+		linkElement.href = URL.createObjectURL(blob);
+
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(9);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./styles.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/sass-loader/index.js!./styles.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\nbody {\n  font-family: \"Roboto Slab\", serif;\n  box-sizing: border-box; }\n\nbutton {\n  cursor: pointer; }\n\n.hero {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: column;\n  flex-wrap: wrap;\n  background-color: #4993FA;\n  font-family: \"Roboto Slab\", serif;\n  font-size: 40px;\n  padding: 20px; }\n\ntextarea {\n  border: none;\n  resize: none; }\n\n.teal-h1 {\n  color: #ffffff; }\n\n.grey-h1 {\n  color: #3b3b3d; }\n\n.input-container {\n  margin-top: 20px;\n  width: 60%; }\n\n.title-input, .body-input {\n  border: 2px solid #D1D3D4;\n  width: 100%;\n  font-size: 20px;\n  height: 32px;\n  margin: auto;\n  margin-bottom: 1%;\n  text-indent: 10px;\n  line-height: 30px; }\n\n.search-field {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: column;\n  border: 2px solid #D1D3D4;\n  font-size: 20px;\n  height: 30px;\n  margin: auto;\n  margin-top: 5%;\n  margin-bottom: 3%;\n  text-indent: 3%;\n  width: 58%; }\n\n.save {\n  background: #E04462;\n  border: none;\n  color: #ffffff;\n  display: block;\n  font-size: 25px;\n  font-weight: bold;\n  height: 13%;\n  margin: auto;\n  margin-top: 3%;\n  margin-bottom: 3%;\n  padding: 4px;\n  width: 80%; }\n  .save:hover {\n    background: #A20A0A; }\n\n.input-counter, .body-counter {\n  color: #222223;\n  float: right;\n  font-size: 20px;\n  margin-bottom: 4px; }\n\n.show-completed-container, .sort-button-container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: relative;\n  width: 100%;\n  margin-bottom: 90px; }\n\n.show-completed-button, .hide-completed-button, .dropbtn, .dropbtn-hide {\n  background: #E04462;\n  border: none;\n  color: #ffffff;\n  font-weight: bold;\n  font-size: 20px;\n  margin: 30px auto;\n  padding: 10px;\n  width: 25%; }\n  .show-completed-button:hover, .hide-completed-button:hover, .dropbtn:hover, .dropbtn-hide:hover {\n    background: #A20A0A; }\n\n.dropbtn, .dropbtn-hide {\n  display: block; }\n\n.show-completed-button, .dropbtn {\n  position: absolute;\n  top: 0px;\n  z-index: 10; }\n\n.hide-completed-button, .dropbtn-hide {\n  position: absolute;\n  top: 0px; }\n\n.dropdown-content {\n  display: none;\n  width: 100%; }\n  .dropdown-content .none-button, .dropdown-content .low-button, .dropdown-content .normal-button, .dropdown-content .high-button, .dropdown-content .critical-button {\n    border: none;\n    border-radius: 10%;\n    background-color: #4993FA;\n    color: #ffffff;\n    font-size: 11.42857px;\n    font-weight: bold;\n    height: 30px;\n    width: 55px;\n    margin-right: 5px; }\n\n.show-more-button {\n  background: none;\n  border: none;\n  border-bottom: 2px solid #000000;\n  display: none;\n  margin: 50px auto;\n  width: 150px; }\n\n.a-task {\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border-bottom: 2px solid #D1D3D4;\n  margin: auto;\n  min-height: 110px;\n  padding: 15px 0;\n  width: 60%; }\n  .a-task h2 {\n    font-size: 24px;\n    color: #6D6E71;\n    font-family: \"Roboto Slab\", serif; }\n  .a-task .task-body, .a-task .task-title {\n    display: inline-block;\n    outline: 0px solid transparent;\n    padding-bottom: 15px; }\n  .a-task .task-title {\n    color: #3b3b3d; }\n  .a-task .task-body {\n    font-family: \"Open Sans\", sans-serif;\n    color: #545557; }\n  .a-task .task-importance {\n    font-family: \"Roboto Slab\", serif;\n    color: #6D6E71;\n    position: absolute;\n    bottom: 8%; }\n  .a-task .remove-task {\n    position: absolute;\n    z-index: 99;\n    top: 2%;\n    right: 2%;\n    background: url(" + __webpack_require__(10) + ") no-repeat;\n    border: none;\n    height: 20px;\n    width: 20px; }\n    .a-task .remove-task:hover {\n      background: url(" + __webpack_require__(11) + ") no-repeat;\n      border: none;\n      z-index: 99; }\n\n.upvote {\n  background: url(" + __webpack_require__(12) + ") no-repeat;\n  border: none;\n  position: absolute;\n  bottom: 25%;\n  height: 20px;\n  width: 20px;\n  z-index: 99; }\n  .upvote:hover {\n    background: url(" + __webpack_require__(13) + ") no-repeat;\n    border: none;\n    z-index: 99; }\n\n.downvote {\n  background: url(" + __webpack_require__(14) + ") no-repeat;\n  border: none;\n  height: 20px;\n  width: 20px;\n  position: absolute;\n  bottom: 25%;\n  left: 5%;\n  z-index: 99; }\n  .downvote:hover {\n    background: url(" + __webpack_require__(15) + ") no-repeat;\n    border: none;\n    z-index: 99; }\n\n.completed-button {\n  background: url(" + __webpack_require__(16) + ") no-repeat;\n  border: none;\n  height: 20px;\n  width: 20px;\n  position: absolute;\n  bottom: 10%;\n  right: 2%;\n  z-index: 99; }\n  .completed-button:hover {\n    background: url(" + __webpack_require__(17) + ") no-repeat;\n    border: none;\n    z-index: 99; }\n\n.true {\n  opacity: 0.25; }\n\n.show {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: row; }\n\n@media screen and (max-width: 600px) {\n  .body-input {\n    height: 50%; }\n  .search-field {\n    width: 90%; }\n  article.a-task {\n    width: 90%; } }\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = "\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E %3C!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E %3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 20 20' style='enable-background:new 0 0 20 20;' xml:space='preserve'%3E %3Cstyle type='text/css'%3E .st0%7Bfill:%23D1D3D4;%7D .st1%7Bfill:%23FFFFFF;%7D %3C/style%3E %3Cg%3E %3Cg%3E %3Cellipse transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.9558)' class='st0' cx='9.9' cy='10' rx='8.7' ry='8.7'/%3E %3Cg%3E %3Crect x='5.7' y='9.5' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.9559)' class='st1' width='8.5' height='1'/%3E %3Crect x='9.4' y='5.7' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.9559)' class='st1' width='1' height='8.5'/%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E\""
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = "\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E %3C!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E %3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 20 20' style='enable-background:new 0 0 20 20;' xml:space='preserve'%3E %3Cstyle type='text/css'%3E .st0%7Bfill:%23EF4136;%7D .st1%7Bfill:%23FFFFFF;%7D %3C/style%3E %3Cg%3E %3Cg%3E %3Cellipse transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.9558)' class='st0' cx='9.9' cy='10' rx='8.7' ry='8.7'/%3E %3Cg%3E %3Crect x='5.7' y='9.5' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.956)' class='st1' width='8.5' height='1'/%3E %3Crect x='9.4' y='5.7' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.956)' class='st1' width='1' height='8.5'/%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E\""
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	module.exports = "\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E %3C!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E %3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 20 20' style='enable-background:new 0 0 20 20;' xml:space='preserve'%3E %3Cstyle type='text/css'%3E .st0%7Bfill:%23D1D3D4;%7D .st1%7Bfill:%23FFFFFF;%7D %3C/style%3E %3Cg%3E %3Cg%3E %3Cellipse transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.9558)' class='st0' cx='9.9' cy='10' rx='8.7' ry='8.7'/%3E %3Cg%3E %3Crect x='9.4' y='6.6' class='st1' width='1' height='7.8'/%3E %3Cg%3E %3Cpolygon class='st1' points='5.8,10 6.6,10.6 9.9,7 13.3,10.6 14,10 9.9,5.6 '/%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E\""
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = "\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E %3C!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E %3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 20 20' style='enable-background:new 0 0 20 20;' xml:space='preserve'%3E %3Cstyle type='text/css'%3E .st0%7Bfill:%2339B54A;%7D .st1%7Bfill:%23FFFFFF;%7D %3C/style%3E %3Cg%3E %3Cg%3E %3Cellipse transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.9558)' class='st0' cx='9.9' cy='10' rx='8.7' ry='8.7'/%3E %3Cg%3E %3Crect x='9.4' y='6.6' class='st1' width='1' height='7.8'/%3E %3Cg%3E %3Cpolygon class='st1' points='5.8,10 6.6,10.6 9.9,7 13.3,10.6 14,10 9.9,5.6 '/%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E\""
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	module.exports = "\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E %3C!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E %3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 20 20' style='enable-background:new 0 0 20 20;' xml:space='preserve'%3E %3Cstyle type='text/css'%3E .st0%7Bfill:%23D1D3D4;%7D .st1%7Bfill:%23FFFFFF;%7D %3C/style%3E %3Cg%3E %3Cg%3E %3Cellipse transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.9558)' class='st0' cx='9.9' cy='10' rx='8.7' ry='8.7'/%3E %3Cg%3E %3Crect x='9.4' y='5.6' class='st1' width='1' height='7.8'/%3E %3Cg%3E %3Cpolygon class='st1' points='14,10 13.3,9.4 9.9,13 6.6,9.4 5.8,10 9.9,14.4 '/%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E\""
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	module.exports = "\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='utf-8'?%3E %3C!-- Generator: Adobe Illustrator 20.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E %3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 20 20' style='enable-background:new 0 0 20 20;' xml:space='preserve'%3E %3Cstyle type='text/css'%3E .st0%7Bfill:%23FBB040;%7D .st1%7Bfill:%23FFFFFF;%7D %3C/style%3E %3Cg%3E %3Cg%3E %3Cellipse transform='matrix(0.7071 -0.7071 0.7071 0.7071 -4.1604 9.9558)' class='st0' cx='9.9' cy='10' rx='8.7' ry='8.7'/%3E %3Cg%3E %3Crect x='9.4' y='5.6' class='st1' width='1' height='7.8'/%3E %3Cg%3E %3Cpolygon class='st1' points='14,10 13.3,9.4 9.9,13 6.6,9.4 5.8,10 9.9,14.4 '/%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E\""
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = "\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 40.2 (33826) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Emark-complete%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='mark-complete' fill='%23D1D3D4'%3E %3Cg id='Capa_1'%3E %3Cg id='check-circle'%3E %3Cpath d='M10,0 C4.5,0 0,4.5 0,10 C0,15.5 4.5,20 10,20 C15.5,20 20,15.5 20,10 C20,4.5 15.5,0 10,0 L10,0 Z M8,15 L3,10 L4.4,8.6 L8,12.2 L15.6,4.6 L17,6 L8,15 L8,15 Z' id='Shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E\""
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	module.exports = "\"data:image/svg+xml;charset=utf8,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 40.2 (33826) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Emark-complete-hover%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='mark-complete-hover' fill='%23006DF0'%3E %3Cg id='Capa_1'%3E %3Cg id='check-circle'%3E %3Cpath d='M10,0 C4.5,0 0,4.5 0,10 C0,15.5 4.5,20 10,20 C15.5,20 20,15.5 20,10 C20,4.5 15.5,0 10,0 L10,0 Z M8,15 L3,10 L4.4,8.6 L8,12.2 L15.6,4.6 L17,6 L8,15 L8,15 Z' id='Shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E\""
 
 /***/ }
 /******/ ]);

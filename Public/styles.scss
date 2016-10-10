@@ -1,0 +1,295 @@
+@import "reset";
+@import "variables";
+@import "mixins";
+
+body {
+  font-family: $primary-font;
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+}
+
+.hero {
+  @include flex-layout;
+  flex-direction: column;
+  flex-wrap: wrap;
+  background-color: $primary-blue;
+  font-family: $primary-font;
+  font-size: $logo-font-size;
+  padding: 20px;
+}
+
+textarea {
+  border: $hide-border;
+  resize: $display-none;
+}
+
+.teal-h1 {
+  color: $white;
+}
+.grey-h1 {
+  color: darken($dark-gray, 20%);
+}
+
+.input-container {
+  margin-top: 20px;
+  width: $input-width;
+}
+
+.title-input, .body-input {
+  border: $input-border;
+  width: $main-width;
+  font-size: $logo-font-size/2;
+  height: 32px;
+  margin: auto;
+  margin-bottom: 1%;
+  text-indent: $indent-text;
+  line-height: $indent-text * 3;
+}
+
+.search-field {
+  @include flex-layout;
+  flex-direction: column;
+  border: $input-border;
+  font-size: $logo-font-size/2;
+  height: $indent-text * 3;
+  margin: auto;
+  margin-top: $little-margin + 2;
+  margin-bottom: $little-margin;
+  text-indent: $little-margin;
+  width: $input-width - 2;
+}
+
+.save {
+  background: #E04462;
+  border: $hide-border;
+  color: $white;
+  display: block;
+  font-size: $logo-font-size/2 + 5;
+  font-weight: $bold;
+  height: 13%;
+  margin: auto;
+  margin-top: $little-margin;
+  margin-bottom: $little-margin;
+  padding: 4px;
+  width: $main-width - 20;
+
+  &:hover {
+    background: $primary-hover;
+  }
+}
+
+.input-counter, .body-counter {
+  color: darken($dark-gray, 30%);
+  float: right;
+  font-size: $logo-font-size/2;
+  margin-bottom: 4px;
+}
+
+.show-completed-container, .sort-button-container {
+  @include flex-layout;
+  position: relative;
+  width: $main-width;
+  margin-bottom: 90px;
+}
+
+.show-completed-button, .hide-completed-button, .dropbtn, .dropbtn-hide {
+  background: $primary-red;
+  border: $hide-border;
+  color: $white;
+  font-weight: $bold;
+  font-size: $logo-font-size/2;
+  margin: 30px $display-auto;
+  padding: 10px;
+  width: $main-width/4;
+
+  &:hover {
+    background: $primary-hover;
+  }
+}
+
+.dropbtn, .dropbtn-hide {
+  display: block;
+}
+
+.show-completed-button, .dropbtn {
+  @include showAndSortPosition;
+  z-index: 10;
+}
+
+.hide-completed-button, .dropbtn-hide{
+  @include showAndSortPosition;
+}
+
+.dropdown-content {
+  display: $display-none;
+  width: 100%;
+
+  .none-button, .low-button, .normal-button, .high-button, .critical-button {
+    border: $hide-border;
+    border: 2px solid $dark-gray;
+    background: $display-none;
+    color: $dark-gray;
+    font-size: $logo-font-size/3.5;
+    font-weight: $extra-bold;
+    height: $small-button-height;
+    width: 55px;
+    margin-right: 5px;
+  }
+}
+
+.show-more-button {
+  background: $display-none;
+  border: $hide-border;
+  border-bottom: 2px solid $black;
+  display: $display-none;
+  margin: 50px $display-auto;
+  width: 150px;
+}
+
+
+.a-task {
+  display: $display-flex;
+  flex-direction: column;
+  position: relative;
+  border-bottom: $input-border;
+  margin: $display-auto;
+  min-height: 110px;
+  padding: 15px 0;
+  width: $main-width/2 + 10;
+
+  h2 {
+    font-size: $logo-font-size/2 + 4;
+    color: $dark-gray;
+    font-family: $primary-font;
+  }
+
+
+  .task-body, .task-title {
+    display: inline-block;
+    outline: 0px solid transparent;
+    padding-bottom: 15px;
+  }
+
+  .task-title {
+    color: darken($dark-gray, 20%);
+  }
+
+  .task-body {
+    font-family: $task-font;
+    color: darken($dark-gray, 10%);
+  }
+
+  .task-importance {
+    font-family: $primary-font;
+    color: $dark-gray;
+    position: absolute;
+    bottom: 8%;
+  }
+
+  .remove-task {
+    position: absolute;
+    z-index: $mid-z-index;
+    top: 2%;
+    right: 2%;
+    background: url(../Images/delete.svg) no-repeat;
+    border: $hide-border;
+    height: $small-button-height;
+    width: $small-button-width;
+
+    &:hover {
+      background: url(../Images/delete-hover.svg) no-repeat;
+      border: $hide-border;
+      z-index: $mid-z-index;
+    }
+  }
+
+    .upvote {
+      background: url(../Images/upvote.svg) no-repeat;
+      border: $hide-border;
+      position: absolute;
+      bottom: 25%;
+      height: $small-button-height;
+      width: $small-button-width;
+      z-index: $mid-z-index;
+
+      &:hover {
+        background: url(../Images/upvote-hover.svg) no-repeat;
+        border: $hide-border;
+        z-index: $mid-z-index;
+      }
+    }
+
+      .downvote {
+        background: url(../Images/downvote.svg) no-repeat;
+        border: $hide-border;
+        height: $small-button-height;
+        width: $small-button-width;
+        position: absolute;
+        bottom: 25%;
+        left: 5%;
+        z-index: $mid-z-index;
+
+        &:hover {
+          background: url(../Images/downvote-hover.svg) no-repeat;
+          border: $hide-border;
+          z-index: $mid-z-index;
+        }
+      }
+
+      .completed-button {
+        background: url(../Images/mark-complete.svg) no-repeat;
+        border: $hide-border;
+        height: $small-button-height;
+        width: $small-button-width;
+        position: absolute;
+        bottom: 10%;
+        right: 2%;
+        z-index: $mid-z-index;
+
+        &:hover {
+          background: url(../Images/mark-complete-hover.svg) no-repeat;
+          border: $hide-border;
+          z-index: $mid-z-index;
+        }
+      }
+}
+
+.true {
+  opacity: $complete-opacity;
+}
+
+.show {
+  @include flex-layout
+  flex-direction: row;
+}
+
+@media screen and (max-width: 600px){
+
+  .title-input, .body-input, .search-field {
+    font-size: $logo-font-size/2.5;
+  }
+
+  .body-input {
+    height: 100px;
+  }
+
+  .search-field {
+    width: 60%;
+  }
+
+  .save {
+    font-size: $logo-font-size/2;
+  }
+
+  .show-completed-button, .hide-completed-button, .dropbtn, .dropbtn-hide {
+    font-size: $logo-font-size/3
+  }
+
+  article.a-task {
+    width: 90%;
+  }
+
+}
