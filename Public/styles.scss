@@ -4,6 +4,7 @@
 
 body {
   font-family: $primary-font;
+  box-sizing: border-box;
 }
 
 button {
@@ -18,7 +19,6 @@ button {
   font-family: $primary-font;
   font-size: $logo-font-size;
   padding: 20px;
-  width: $main-width;
 }
 
 textarea {
@@ -59,19 +59,22 @@ textarea {
   margin-top: $little-margin;
   margin-bottom: $little-margin;
   text-indent: $little-margin;
-  width: $input-width;
+  width: $input-width - 2;
 }
 
 .save {
   background: #E04462;
   border: $hide-border;
   color: $white;
+  display: block;
   font-size: $logo-font-size/2 + 5;
   font-weight: $bold;
   height: 13%;
   margin: auto;
+  margin-top: $little-margin;
   margin-bottom: $little-margin;
-  width: $main-width;
+  padding: 4px;
+  width: $main-width - 20;
 
   &:hover {
     background: $primary-hover;
@@ -101,6 +104,10 @@ textarea {
   margin: 30px $display-auto;
   padding: 10px;
   width: $main-width/4;
+
+  &:hover {
+    background: $primary-hover;
+  }
 }
 
 .dropbtn, .dropbtn-hide {
