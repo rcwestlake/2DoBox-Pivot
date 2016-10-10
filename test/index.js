@@ -129,8 +129,7 @@ describe('our Task', function () {
     var task = new Task()
     assert.isFunction(task.addComparedTaskClass)
   })
-
-
+});
 
 describe('taskArray functions', function () {
 
@@ -176,17 +175,5 @@ describe('taskArray functions', function () {
       TaskArray.markCompleted(task)
       assert.equal(task.completed, true)
   })
-
-
-
-
-
-
-
-});
-
-
-
-
 
 });
