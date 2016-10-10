@@ -56,7 +56,7 @@ textarea {
   font-size: $logo-font-size/2;
   height: $indent-text * 3;
   margin: auto;
-  margin-top: $little-margin;
+  margin-top: $little-margin + 2;
   margin-bottom: $little-margin;
   text-indent: $little-margin;
   width: $input-width - 2;
