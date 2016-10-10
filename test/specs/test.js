@@ -22,9 +22,6 @@ describe('attributes on our application',function(){
       taskTitle.setValue('great title')
       taskBody.setValue('great description')
 
-      assert.equal(taskTitle.getValue(), 'great title')
-      assert.equal(taskBody.getValue(), 'great description')
-
       browser.click('.save')
 
       var allTasks = browser.getText('.task-title')
@@ -70,7 +67,54 @@ describe('attributes on our application',function(){
     assert.equal(taskImportance.getText(), 'Critical')
 
   });
-  //
+
+  it('should have an editable title that can receive values and persist on the page', function() {
+      browser.url('/')
+
+      var taskTitle = browser.element('.task-title')
+      browser.click('.task-title')
+      taskTitle.setValue('better title')
+
+      assert.equal(browser.getText('.task-title'), 'better title')
+    });
+
+    it('should have an editable body that can receive values and persist on the page', function() {
+        browser.url('/')
+
+        var taskBody = browser.element('.task-body')
+        browser.click('.task-body')
+        taskBody.setValue('better body')
+
+        assert.equal(browser.getText('.task-body'), 'better body')
+      });
+
+      it('should have a search function that will display only the tasks that have the search input text for their title or body', function() {
+          browser.url('/')
+
+          var taskTitle = browser.element(".title-input")
+          var taskBody = browser.element(".body-input")
+
+          taskTitle.setValue('greatest title')
+          taskBody.setValue('greatest description')
+          browser.click('.save')
+
+          var searchField = browser.element('.search-field')
+          searchField.setValue('great')
+
+          var allTasksVisible = browser.isVisibleWithinViewport('.a-task.false')
+
+
+          assert.equal(allTasksVisible.length, 2)
+
+
+
+
+
+          // assert.equal(browser.getText('.task-body'), 'better body')
+        });
+
+
+
   // it('should be able to allow tasks to remain in local storage on reload', function(){
   //   browser.url('/')
   //   browser.refresh()
@@ -115,16 +159,10 @@ describe('attributes on our application',function(){
       taskTitle.setValue('great title')
       taskBody.setValue('great description')
 
-      // assert.equal(taskTitle.getValue(), 'great title')
-      // assert.equal(taskBody.getValue(), 'great description')
-
       browser.click('.save')
 
       taskTitle.setValue('better title')
       taskBody.setValue('better description')
-
-      // assert.equal(taskTitle.getValue(), 'better title')
-      // assert.equal(taskBody.getValue(), 'better description')
 
       browser.click('.save')
       browser.click('.completed-button')
@@ -135,6 +173,19 @@ describe('attributes on our application',function(){
 
       assert.equal(completedTasks.length, 2)
     });
+
+    it('should have an input counter that counts characters in title and body input fields', function() {
+        browser.url('/')
+        var taskTitle = browser.element(".title-input")
+        var taskBody = browser.element(".body-input")
+
+        taskTitle.setValue('great title')
+        taskBody.setValue('great description')
+
+        assert.equal(browser.getText('.input-counter'), '11')
+        assert.equal(browser.getText('.body-counter'), '17')
+      });
+
 
 
 
@@ -159,12 +210,8 @@ describe('attributes on our application',function(){
   // });
 
 
-  // TODO: editing an existing to do (body and title)
-  // Searching - should filter just the tasks containing the input value
-  // Make as complete (css should be a certain way)
-  // critical, high, normal, low, non importance
+  // TODO:
   // should only show ten most recent
   // filter by importance
-  // character counter - disabled if
 
 });
