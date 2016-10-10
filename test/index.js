@@ -129,11 +129,51 @@ describe('our Task', function () {
     var task = new Task()
     assert.isFunction(task.addComparedTaskClass)
   })
+});
 
+describe('taskArray functions', function () {
 
+  it('should push a new task to the allTasks array', function(){
+    var task = new Task('great title', 'fabulous body', 123, 'Normal', false);
+    TaskArray.pushToArray(task)
+    assert.equal(TaskArray.allTasks.length, 1)
+  })
 
+  it('should store the new task to localstorage with the store function', function(){
+    TaskArray.store();
+    var taskFromLocalStorage = JSON.parse(localStorage.getItem('allTasks'))
+    assert.equal(taskFromLocalStorage.length, 1)
+  })
 
+  it('should retrieve the new task from localStorage with the retrieve function and push it to the allTasks array with the populateArray method', function() {
+    TaskArray.retrieve()
+    TaskArray.populateArray()
+    assert.equal(TaskArray.allTasks.length, 2)
+  })
 
+  it("should set a task's importance from Normal to Low with the downVote method", function() {
+      var task = new Task('great title', 'fabulous body', 123, 'Normal', false);
+      TaskArray.downVote(task)
+      assert.equal(task.importance, 'Low')
+  })
 
+  it("should set a task's importance from Normal to High with the upVote method", function() {
+      var task = new Task('great title', 'fabulous body', 123, 'Normal', false);
+      TaskArray.upVote(task)
+      assert.equal(task.importance, 'High')
+  })
+
+  it('should remove a task from the allTasks array with the removeTask feature', function() {
+    var task = new Task('great title', 'fabulous body', 123, 'Normal', false);
+    TaskArray.pushToArray(task)
+    TaskArray.removeTask(task.id)
+    assert.equal(TaskArray.allTasks.length, 0)
+  })
+
+  it("should set a task's completed status to true if the markCompleted method is called", function(){
+      var task = new Task('great title', 'fabulous body', 123, 'Normal', false);
+      TaskArray.markCompleted(task)
+      assert.equal(task.completed, true)
+  })
 
 });
