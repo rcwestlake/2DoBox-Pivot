@@ -14,7 +14,9 @@ button {
   @include flex-layout;
   flex-direction: column;
   flex-wrap: wrap;
-  background-color: $off-white;
+
+
+  // background-color: $off-white;
   font-family: $primary-font;
   font-size: $logo-font-size;
   padding-top: 20px;
@@ -71,10 +73,10 @@ textarea {
   margin: auto;
   margin-bottom: $little-margin;
   width: $main-width;
-}
 
-.save:hover{
-  background: $primary-hover;
+  &:hover {
+    background: $primary-hover;
+  }
 }
 
 .input-counter, .body-counter {
@@ -119,6 +121,27 @@ textarea {
   @include showAndSortPosition;
 }
 
+.dropdown-content {
+  display: $display-none;
+  width: 100%;
+
+  .none-button, .low-button, .normal-button, .high-button, .critical-button {
+    border: $hide-border;
+
+
+    background: #cb2d3e; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #cb2d3e , #ef473a); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #cb2d3e , #ef473a); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    color: white;
+    font-size: $logo-font-size/3.5;
+    font-weight: $bold;
+    height: 30px;
+    width: 50px;
+    margin-right: 5px;
+  }
+}
+
 .show-more-button {
   background: $display-none;
   border: $hide-border;
@@ -138,31 +161,32 @@ textarea {
   min-height: 110px;
   padding: 15px 0;
   width: 60%;
+
+  h2 {
+    font-size: $logo-font-size/2 + 4;
+    color: $dark-gray;
+    font-family: $primary-font;
+  }
+
+  .task-body {
+    font-family: $task-font;
+  }
+
+  .task-body, .task-title {
+    color: $light-gray;
+    display: inline-block;
+    outline: 0px solid transparent;
+    padding-bottom: 15px;
+  }
+
+  .task-importance {
+    font-family: $primary-font;
+    color: $dark-gray;
+    position: absolute;
+    bottom: 8%;
+  }
 }
 
-.task-body {
-  font-family: $task-font;
-}
-
-.a-task h2 {
-  font-size: $logo-font-size/2 + 4;
-  color: $dark-gray;
-  font-family: $primary-font;
-}
-
-.task-body, .task-title {
-  color: $light-gray;
-  display: inline-block;
-  outline: 0px solid transparent;
-  padding-bottom: 15px;
-}
-
-.task-importance {
-  font-family: $primary-font;
-  color: $dark-gray;
-  position: absolute;
-  bottom: 8%;
-}
 
 .remove-task {
   position: absolute;
@@ -173,12 +197,12 @@ textarea {
   border: $hide-border;
   height: $small-button-height;
   width: $small-button-width;
-}
 
-.remove-task:hover {
-  background: url(../Images/delete-hover.svg) no-repeat;
-  border: $hide-border;
-  z-index: $mid-z-index;
+  &:hover {
+    background: url(../Images/delete-hover.svg) no-repeat;
+    border: $hide-border;
+    z-index: $mid-z-index;
+  }
 }
 
 .upvote {
@@ -189,12 +213,12 @@ textarea {
   height: $small-button-height;
   width: $small-button-width;
   z-index: $mid-z-index;
-}
 
-.upvote:hover {
-  background: url(../Images/upvote-hover.svg) no-repeat;
-  border: $hide-border;
-  z-index: $mid-z-index;
+  &:hover {
+    background: url(../Images/upvote-hover.svg) no-repeat;
+    border: $hide-border;
+    z-index: $mid-z-index;
+  }
 }
 
 .downvote {
@@ -206,12 +230,12 @@ textarea {
   bottom: 25%;
   left: 5%;
   z-index: $mid-z-index;
-}
 
-.downvote:hover {
-  background: url(../Images/downvote-hover.svg) no-repeat;
-  border: $hide-border;
-  z-index: $mid-z-index;
+  &:hover {
+    background: url(../Images/downvote-hover.svg) no-repeat;
+    border: $hide-border;
+    z-index: $mid-z-index;
+  }
 }
 
 .completed-button {
@@ -223,11 +247,6 @@ textarea {
 
 .true {
   opacity: $complete-opacity;
-}
-
-.dropdown-content {
-  display: $display-none;
-  width: 100%;
 }
 
 .show {
