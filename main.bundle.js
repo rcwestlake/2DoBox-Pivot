@@ -44,8 +44,9 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var TaskArray = __webpack_require__(1);
-	var Task = __webpack_require__(2);
+	const TaskArray = __webpack_require__(1);
+	const Task = __webpack_require__(2);
+	const $ = __webpack_require__(3);
 	__webpack_require__(4);
 	__webpack_require__(8);
 
@@ -54,19 +55,12 @@
 	var $saveButton = $('.save');
 	var $taskList = $('.task-list');
 	var $searchField = $('.search-field');
-	// completed tasks button
-
 
 	$(document).ready(function () {
 	  TaskArray.populateArray();
 	  TaskArray.renderUncompletedTasks(10, 0);
-
-	  if (TaskArray.allTasks.length < 1) {
-	    $('.show-completed-button').hide();
-	    $('.hide-completed-button').hide();
-	    $('.dropbtn').hide();
-	    $('.dropbtn-hide').hide();
-	  }
+	  showIfContentInArray();
+	  hideIfNoTasks();
 	});
 
 	$($saveButton).on('click', function () {
@@ -74,13 +68,8 @@
 	  TaskArray.pushToArray(task);
 	  TaskArray.store();
 	  TaskArray.renderTasksToHtml(task);
-
-	  if (TaskArray.allTasks.length > 0) {
-	    $('.show-completed-button').show();
-	    $('.hide-completed-button').show();
-	    $('.dropbtn').show();
-	    $('.dropbtn-hide').show();
-	  }
+	  showIfContentInArray();
+	  hideIfNoTasks();
 
 	  if (TaskArray.allTasks.length > 10) {
 	    hideLastTask();
@@ -88,6 +77,7 @@
 	  }
 	  TaskArray.clearInputs();
 	  TaskArray.toggleButton();
+	  makeCounterZero();
 	});
 
 	$($taskList).on('click', '.remove-task', function (e) {
@@ -151,11 +141,11 @@
 	  TaskArray.toggleButton();
 	});
 
-	$('.title-input').on('keyup', function () {
+	$($titleInput).on('keyup', function () {
 	  TaskArray.inputCounter();
 	});
 
-	$('.body-input').on('keyup', function () {
+	$($bodyInput).on('keyup', function () {
 	  TaskArray.bodyCounter();
 	});
 
@@ -202,26 +192,39 @@
 	  }
 	});
 
-	/*filters based on importance level*/
 	$('.none-button, .low-button, .normal-button, .high-button, .critical-button').on('click', function () {
 	  var specificButton = $(this).text();
 	  TaskArray.filterByImportance(specificButton);
 	});
 
-	/*filters based on importance level*/
-	$('.none-button, .low-button, .normal-button, .high-button, .critical-button').on('click', function () {
-	  var specificButton = $(this).text();
-	  TaskArray.filterByImportance(specificButton);
-	});
-
-	/*Sort function called on click to show options*/
 	function showSortOptions() {
 	  $('#myDropdown').toggleClass('show');
 	}
 
-	/*hides oldest task to keep 10 on page*/
 	function hideLastTask() {
 	  $('article:last-child').hide();
+	}
+
+	function showIfContentInArray() {
+	  if (TaskArray.allTasks.length > 0) {
+	    $('.show-completed-button').show();
+	    $('.hide-completed-button').show();
+	    $('.dropbtn').show();
+	    $('.dropbtn-hide').show();
+	  }
+	}
+
+	function hideIfNoTasks() {
+	  if (TaskArray.allTasks.length < 1) {
+	    $('.show-completed-button').hide();
+	    $('.hide-completed-button').hide();
+	    $('.dropbtn').hide();
+	    $('.dropbtn-hide').hide();
+	  }
+	}
+
+	function makeCounterZero() {
+	  $('.input-counter, .body-counter').text(0);
 	}
 
 	function getTitle() {
@@ -279,7 +282,7 @@
 	         <button class="upvote" aria-label='Increase task importance' value="upvote-button" alt="Button with arrow pointing upwards to tell user to increase importance"></button>
 	         <button class="downvote" aria-label='Decrease task importance' value="downvote-button"></button>
 	         <h6 class= "task-importance ` + task.importance + `" tabindex="0"><span>Importance:</span> <span class="displayed-importance" tabindex="0">` + task.importance + `</span> </h6>
-	         <button class="completed-button" aria-label='Mark task completed' value="completed-button">Task Completed</button>
+	         <button class="completed-button" aria-label='Mark task completed' value="completed-button"></button>
 	       </article>`);
 	  },
 
@@ -2528,7 +2531,7 @@
 
 
 	// module
-	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\nbody {\n  font-family: \"Roboto Slab\", serif;\n  box-sizing: border-box; }\n\nbutton {\n  cursor: pointer; }\n\n.hero {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: column;\n  flex-wrap: wrap;\n  background-color: #4993FA;\n  font-family: \"Roboto Slab\", serif;\n  font-size: 40px;\n  padding: 20px; }\n\ntextarea {\n  border: none;\n  resize: none; }\n\n.teal-h1 {\n  color: #ffffff; }\n\n.grey-h1 {\n  color: #3b3b3d; }\n\n.input-container {\n  margin-top: 20px;\n  width: 60%; }\n\n.title-input, .body-input {\n  border: 2px solid #D1D3D4;\n  width: 100%;\n  font-size: 20px;\n  height: 32px;\n  margin: auto;\n  margin-bottom: 1%;\n  text-indent: 10px;\n  line-height: 30px; }\n\n.search-field {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: column;\n  border: 2px solid #D1D3D4;\n  font-size: 20px;\n  height: 30px;\n  margin: auto;\n  margin-top: 5%;\n  margin-bottom: 3%;\n  text-indent: 3%;\n  width: 58%; }\n\n.save {\n  background: #E04462;\n  border: none;\n  color: #ffffff;\n  display: block;\n  font-size: 25px;\n  font-weight: bold;\n  height: 13%;\n  margin: auto;\n  margin-top: 3%;\n  margin-bottom: 3%;\n  padding: 4px;\n  width: 80%; }\n  .save:hover {\n    background: #A20A0A; }\n\n.input-counter, .body-counter {\n  color: #222223;\n  float: right;\n  font-size: 20px;\n  margin-bottom: 4px; }\n\n.show-completed-container, .sort-button-container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: relative;\n  width: 100%;\n  margin-bottom: 90px; }\n\n.show-completed-button, .hide-completed-button, .dropbtn, .dropbtn-hide {\n  background: #E04462;\n  border: none;\n  color: #ffffff;\n  font-weight: bold;\n  font-size: 20px;\n  margin: 30px auto;\n  padding: 10px;\n  width: 25%; }\n  .show-completed-button:hover, .hide-completed-button:hover, .dropbtn:hover, .dropbtn-hide:hover {\n    background: #A20A0A; }\n\n.dropbtn, .dropbtn-hide {\n  display: block; }\n\n.show-completed-button, .dropbtn {\n  position: absolute;\n  top: 0px;\n  z-index: 10; }\n\n.hide-completed-button, .dropbtn-hide {\n  position: absolute;\n  top: 0px; }\n\n.dropdown-content {\n  display: none;\n  width: 100%; }\n  .dropdown-content .none-button, .dropdown-content .low-button, .dropdown-content .normal-button, .dropdown-content .high-button, .dropdown-content .critical-button {\n    border: none;\n    border-radius: 10%;\n    background-color: #4993FA;\n    color: #ffffff;\n    font-size: 11.42857px;\n    font-weight: bold;\n    height: 30px;\n    width: 55px;\n    margin-right: 5px; }\n\n.show-more-button {\n  background: none;\n  border: none;\n  border-bottom: 2px solid #000000;\n  display: none;\n  margin: 50px auto;\n  width: 150px; }\n\n.a-task {\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border-bottom: 2px solid #D1D3D4;\n  margin: auto;\n  min-height: 110px;\n  padding: 15px 0;\n  width: 60%; }\n  .a-task h2 {\n    font-size: 24px;\n    color: #6D6E71;\n    font-family: \"Roboto Slab\", serif; }\n  .a-task .task-body, .a-task .task-title {\n    display: inline-block;\n    outline: 0px solid transparent;\n    padding-bottom: 15px; }\n  .a-task .task-title {\n    color: #3b3b3d; }\n  .a-task .task-body {\n    font-family: \"Open Sans\", sans-serif;\n    color: #545557; }\n  .a-task .task-importance {\n    font-family: \"Roboto Slab\", serif;\n    color: #6D6E71;\n    position: absolute;\n    bottom: 8%; }\n  .a-task .remove-task {\n    position: absolute;\n    z-index: 99;\n    top: 2%;\n    right: 2%;\n    background: url(" + __webpack_require__(10) + ") no-repeat;\n    border: none;\n    height: 20px;\n    width: 20px; }\n    .a-task .remove-task:hover {\n      background: url(" + __webpack_require__(11) + ") no-repeat;\n      border: none;\n      z-index: 99; }\n\n.upvote {\n  background: url(" + __webpack_require__(12) + ") no-repeat;\n  border: none;\n  position: absolute;\n  bottom: 25%;\n  height: 20px;\n  width: 20px;\n  z-index: 99; }\n  .upvote:hover {\n    background: url(" + __webpack_require__(13) + ") no-repeat;\n    border: none;\n    z-index: 99; }\n\n.downvote {\n  background: url(" + __webpack_require__(14) + ") no-repeat;\n  border: none;\n  height: 20px;\n  width: 20px;\n  position: absolute;\n  bottom: 25%;\n  left: 5%;\n  z-index: 99; }\n  .downvote:hover {\n    background: url(" + __webpack_require__(15) + ") no-repeat;\n    border: none;\n    z-index: 99; }\n\n.completed-button {\n  background: url(" + __webpack_require__(16) + ") no-repeat;\n  border: none;\n  height: 20px;\n  width: 20px;\n  position: absolute;\n  bottom: 10%;\n  right: 2%;\n  z-index: 99; }\n  .completed-button:hover {\n    background: url(" + __webpack_require__(17) + ") no-repeat;\n    border: none;\n    z-index: 99; }\n\n.true {\n  opacity: 0.25; }\n\n.show {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: row; }\n\n@media screen and (max-width: 600px) {\n  .body-input {\n    height: 50%; }\n  .search-field {\n    width: 90%; }\n  article.a-task {\n    width: 90%; } }\n", ""]);
+	exports.push([module.id, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed,\nfigure, figcaption, footer, header, hgroup,\nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  font-size: 100%;\n  font: inherit;\n  vertical-align: baseline; }\n\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure,\nfooter, header, hgroup, menu, nav, section {\n  display: block; }\n\nbody {\n  line-height: 1; }\n\nol, ul {\n  list-style: none; }\n\nblockquote, q {\n  quotes: none; }\n\nblockquote:before, blockquote:after,\nq:before, q:after {\n  content: '';\n  content: none; }\n\ntable {\n  border-collapse: collapse;\n  border-spacing: 0; }\n\nbody {\n  font-family: \"Roboto Slab\", serif;\n  box-sizing: border-box; }\n\nbutton {\n  cursor: pointer; }\n\n.hero {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: column;\n  flex-wrap: wrap;\n  background-color: #4993FA;\n  font-family: \"Roboto Slab\", serif;\n  font-size: 40px;\n  padding: 20px; }\n\ntextarea {\n  border: none;\n  resize: none; }\n\n.teal-h1 {\n  color: #ffffff; }\n\n.grey-h1 {\n  color: #3b3b3d; }\n\n.input-container {\n  margin-top: 20px;\n  width: 60%; }\n\n.title-input, .body-input {\n  border: 2px solid #D1D3D4;\n  width: 100%;\n  font-size: 20px;\n  height: 32px;\n  margin: auto;\n  margin-bottom: 1%;\n  text-indent: 10px;\n  line-height: 30px; }\n\n.search-field {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: column;\n  border: 2px solid #D1D3D4;\n  font-size: 20px;\n  height: 30px;\n  margin: auto;\n  margin-top: 5%;\n  margin-bottom: 3%;\n  text-indent: 3%;\n  width: 58%; }\n\n.save {\n  background: #E04462;\n  border: none;\n  color: #ffffff;\n  display: block;\n  font-size: 25px;\n  font-weight: bold;\n  height: 13%;\n  margin: auto;\n  margin-top: 3%;\n  margin-bottom: 3%;\n  padding: 4px;\n  width: 80%; }\n  .save:hover {\n    background: #A20A0A; }\n\n.input-counter, .body-counter {\n  color: #222223;\n  float: right;\n  font-size: 20px;\n  margin-bottom: 4px; }\n\n.show-completed-container, .sort-button-container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: relative;\n  width: 100%;\n  margin-bottom: 90px; }\n\n.show-completed-button, .hide-completed-button, .dropbtn, .dropbtn-hide {\n  background: #E04462;\n  border: none;\n  color: #ffffff;\n  font-weight: bold;\n  font-size: 20px;\n  margin: 30px auto;\n  padding: 10px;\n  width: 25%; }\n  .show-completed-button:hover, .hide-completed-button:hover, .dropbtn:hover, .dropbtn-hide:hover {\n    background: #A20A0A; }\n\n.dropbtn, .dropbtn-hide {\n  display: block; }\n\n.show-completed-button, .dropbtn {\n  position: absolute;\n  top: 0px;\n  z-index: 10; }\n\n.hide-completed-button, .dropbtn-hide {\n  position: absolute;\n  top: 0px; }\n\n.dropdown-content {\n  display: none;\n  width: 100%; }\n  .dropdown-content .none-button, .dropdown-content .low-button, .dropdown-content .normal-button, .dropdown-content .high-button, .dropdown-content .critical-button {\n    border: none;\n    border: 2px solid #6D6E71;\n    background: none;\n    color: #6D6E71;\n    font-size: 11.42857px;\n    font-weight: 800;\n    height: 20px;\n    width: 55px;\n    margin-right: 5px; }\n\n.show-more-button {\n  background: none;\n  border: none;\n  border-bottom: 2px solid #000000;\n  display: none;\n  margin: 50px auto;\n  width: 150px; }\n\n.a-task {\n  display: flex;\n  flex-direction: column;\n  position: relative;\n  border-bottom: 2px solid #D1D3D4;\n  margin: auto;\n  min-height: 110px;\n  padding: 15px 0;\n  width: 60%; }\n  .a-task h2 {\n    font-size: 24px;\n    color: #6D6E71;\n    font-family: \"Roboto Slab\", serif; }\n  .a-task .task-body, .a-task .task-title {\n    display: inline-block;\n    outline: 0px solid transparent;\n    padding-bottom: 15px; }\n  .a-task .task-title {\n    color: #3b3b3d; }\n  .a-task .task-body {\n    font-family: \"Open Sans\", sans-serif;\n    color: #545557; }\n  .a-task .task-importance {\n    font-family: \"Roboto Slab\", serif;\n    color: #6D6E71;\n    position: absolute;\n    bottom: 8%; }\n  .a-task .remove-task {\n    position: absolute;\n    z-index: 99;\n    top: 2%;\n    right: 2%;\n    background: url(" + __webpack_require__(10) + ") no-repeat;\n    border: none;\n    height: 20px;\n    width: 20px; }\n    .a-task .remove-task:hover {\n      background: url(" + __webpack_require__(11) + ") no-repeat;\n      border: none;\n      z-index: 99; }\n  .a-task .upvote {\n    background: url(" + __webpack_require__(12) + ") no-repeat;\n    border: none;\n    position: absolute;\n    bottom: 25%;\n    height: 20px;\n    width: 20px;\n    z-index: 99; }\n    .a-task .upvote:hover {\n      background: url(" + __webpack_require__(13) + ") no-repeat;\n      border: none;\n      z-index: 99; }\n  .a-task .downvote {\n    background: url(" + __webpack_require__(14) + ") no-repeat;\n    border: none;\n    height: 20px;\n    width: 20px;\n    position: absolute;\n    bottom: 25%;\n    left: 5%;\n    z-index: 99; }\n    .a-task .downvote:hover {\n      background: url(" + __webpack_require__(15) + ") no-repeat;\n      border: none;\n      z-index: 99; }\n  .a-task .completed-button {\n    background: url(" + __webpack_require__(16) + ") no-repeat;\n    border: none;\n    height: 20px;\n    width: 20px;\n    position: absolute;\n    bottom: 10%;\n    right: 2%;\n    z-index: 99; }\n    .a-task .completed-button:hover {\n      background: url(" + __webpack_require__(17) + ") no-repeat;\n      border: none;\n      z-index: 99; }\n\n.true {\n  opacity: 0.25; }\n\n.show {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: row; }\n\n@media screen and (max-width: 600px) {\n  .title-input, .body-input, .search-field {\n    font-size: 16px; }\n  .body-input {\n    height: 100px; }\n  .search-field {\n    width: 60%; }\n  .save {\n    font-size: 20px; }\n  .show-completed-button, .hide-completed-button, .dropbtn, .dropbtn-hide {\n    font-size: 13.33333px; }\n  article.a-task {\n    width: 90%; } }\n", ""]);
 
 	// exports
 
