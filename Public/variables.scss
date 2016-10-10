@@ -1,0 +1,40 @@
+//SCSS variables, imported into styles.scss
+
+//layouts
+$display-flex: flex;
+$justify-center: center;
+$align-center: center;
+$main-width: 100%;
+$input-width: 60%;
+$small-button-height: 20px;
+$small-button-width: 20px;
+
+//fonts
+$primary-font: 'Roboto Slab', serif;
+$task-font: 'Open Sans', sans-serif;
+$logo-font-size: 40px;
+$bold: bold;
+
+//colors
+$primary-blue: #4993FA;
+$primary-red: #E04462;
+$primary-hover: #A20A0A;
+$primary-green: #00A79D;
+$white: #ffffff;
+$off-white: #e5f3f2;
+$dark-gray: #6D6E71;
+$light-gray: #939598;
+$black: #000000;
+
+//input fields
+$input-border: 2px solid #D1D3D4;
+
+//other styles
+$border-radius: 10%;
+$display-auto: auto;
+$display-none: none;
+$complete-opacity: 0.25;
+$hide-border: none;
+$indent-text: 10px;
+$little-margin: 3%;
+$mid-z-index: 99;
