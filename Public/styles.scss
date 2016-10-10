@@ -158,7 +158,7 @@ textarea {
   margin: $display-auto;
   min-height: 110px;
   padding: 15px 0;
-  width: 60%;
+  width: $main-width/2 + 10;
 
   h2 {
     font-size: $logo-font-size/2 + 4;
@@ -205,56 +205,56 @@ textarea {
       z-index: $mid-z-index;
     }
   }
-}
 
-.upvote {
-  background: url(../Images/upvote.svg) no-repeat;
-  border: $hide-border;
-  position: absolute;
-  bottom: 25%;
-  height: $small-button-height;
-  width: $small-button-width;
-  z-index: $mid-z-index;
+    .upvote {
+      background: url(../Images/upvote.svg) no-repeat;
+      border: $hide-border;
+      position: absolute;
+      bottom: 25%;
+      height: $small-button-height;
+      width: $small-button-width;
+      z-index: $mid-z-index;
 
-  &:hover {
-    background: url(../Images/upvote-hover.svg) no-repeat;
-    border: $hide-border;
-    z-index: $mid-z-index;
-  }
-}
+      &:hover {
+        background: url(../Images/upvote-hover.svg) no-repeat;
+        border: $hide-border;
+        z-index: $mid-z-index;
+      }
+    }
 
-.downvote {
-  background: url(../Images/downvote.svg) no-repeat;
-  border: $hide-border;
-  height: $small-button-height;
-  width: $small-button-width;
-  position: absolute;
-  bottom: 25%;
-  left: 5%;
-  z-index: $mid-z-index;
+      .downvote {
+        background: url(../Images/downvote.svg) no-repeat;
+        border: $hide-border;
+        height: $small-button-height;
+        width: $small-button-width;
+        position: absolute;
+        bottom: 25%;
+        left: 5%;
+        z-index: $mid-z-index;
 
-  &:hover {
-    background: url(../Images/downvote-hover.svg) no-repeat;
-    border: $hide-border;
-    z-index: $mid-z-index;
-  }
-}
+        &:hover {
+          background: url(../Images/downvote-hover.svg) no-repeat;
+          border: $hide-border;
+          z-index: $mid-z-index;
+        }
+      }
 
-.completed-button {
-  background: url(../Images/mark-complete.svg) no-repeat;
-  border: $hide-border;
-  height: $small-button-height;
-  width: $small-button-width;
-  position: absolute;
-  bottom: 10%;
-  right: 2%;
-  z-index: $mid-z-index;
+      .completed-button {
+        background: url(../Images/mark-complete.svg) no-repeat;
+        border: $hide-border;
+        height: $small-button-height;
+        width: $small-button-width;
+        position: absolute;
+        bottom: 10%;
+        right: 2%;
+        z-index: $mid-z-index;
 
-  &:hover {
-    background: url(../Images/mark-complete-hover.svg) no-repeat;
-    border: $hide-border;
-    z-index: $mid-z-index;
-  }
+        &:hover {
+          background: url(../Images/mark-complete-hover.svg) no-repeat;
+          border: $hide-border;
+          z-index: $mid-z-index;
+        }
+      }
 }
 
 .true {
@@ -267,12 +267,25 @@ textarea {
 }
 
 @media screen and (max-width: 600px){
+
+  .title-input, .body-input, .search-field {
+    font-size: $logo-font-size/2.5;
+  }
+
   .body-input {
-    height: 50%;
+    height: 100px;
   }
 
   .search-field {
-    width: 90%;
+    width: 60%;
+  }
+
+  .save {
+    font-size: $logo-font-size/2;
+  }
+
+  .show-completed-button, .hide-completed-button, .dropbtn, .dropbtn-hide {
+    font-size: $logo-font-size/3
   }
 
   article.a-task {
