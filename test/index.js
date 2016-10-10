@@ -89,3 +89,51 @@ describe('our Task Array', function () {
     assert.isFunction(TaskArray.bodyCounter)
   })
 });
+
+describe('our Task', function () {
+  it('should be a constructor function', function(){
+    assert.isFunction(Task)
+  })
+
+  it('should instantiate a task', function(){
+    var task = new Task();
+    assert.isObject(task);
+  })
+
+  it('should have a title property', function(){
+    var task = new Task('great title');
+    assert.equal(task.title, 'great title')
+  })
+
+  it('should have a body property', function(){
+    var task = new Task('great title', 'fabulous body');
+    assert.equal(task.body, 'fabulous body');
+  })
+
+  it('should have an id', function() {
+    var task = new Task('great title', 'fabulous body', 123)
+    assert.equal(task.id, 123)
+  })
+
+  it('should have an importance', function() {
+    var task = new Task('great title', 'fabulous body', 123, 'Normal')
+    assert.equal(task.importance, 'Normal')
+  })
+
+  it('should have an completed status', function() {
+    var task = new Task('great title', 'fabulous body', 123, 'Normal', false)
+    assert.equal(task.completed, false)
+  })
+
+  it('should have a prototype method called addComparedTaskClass', function(){
+    var task = new Task()
+    assert.isFunction(task.addComparedTaskClass)
+  })
+
+
+
+
+
+
+
+});
