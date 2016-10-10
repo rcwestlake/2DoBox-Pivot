@@ -132,6 +132,31 @@ describe('our Task', function () {
 
 
 
+describe('taskArray functions', function () {
+
+  it('should push a new task to the allTasks array', function(){
+    var task = new Task('great title', 'fabulous body', 123, 'Normal', false);
+    TaskArray.pushToArray(task)
+    assert.equal(TaskArray.allTasks.length, 1)
+  })
+
+  it('should store the new task to localstorage with the store function', function(){
+    TaskArray.store();
+    var taskFromLocalStorage = JSON.parse(localStorage.getItem('allTasks'))
+    assert.equal(taskFromLocalStorage.length, 1)
+  })
+
+  it('should retrieve the new task from localStorage with the retrieve function and push it to the allTasks array with the populateArray method', function() {
+    TaskArray.retrieve()
+    TaskArray.populateArray()
+    assert.equal(TaskArray.allTasks.length, 2)
+  })
+
+
+
+
+});
+
 
 
 
