@@ -129,12 +129,12 @@ textarea {
 
   .none-button, .low-button, .normal-button, .high-button, .critical-button {
     border: $hide-border;
-    border-radius: $border-radius;
-    background-color: $primary-blue;
-    color: $white;
+    border: 2px solid $dark-gray;
+    background: $display-none;
+    color: $dark-gray;
     font-size: $logo-font-size/3.5;
-    font-weight: $bold;
-    height: $small-button-height + 10;
+    font-weight: $extra-bold;
+    height: $small-button-height;
     width: 55px;
     margin-right: 5px;
   }
